@@ -7,6 +7,16 @@ showDate()
 showTime()
 setInterval(showTime, 1000)
 
+var addTaskButton = document.getElementById('new-task')
+addTaskButton.style.display = "block"
+addTaskButton.textContent = "New Active Task"
+
+addTaskButton.addEventListener('click', function() {
+    var goalElement = document.getElementById('goal')
+    var goal = prompt("Enter your goal:")
+    goalElement.textContent = "Current Task: " +(goal ? goal : "No task set")
+})
+
 function displayGoal() {
     var goal = "placeholder"
     var goalElement = document.getElementById('goal')
