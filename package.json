@@ -1,0 +1,23 @@
+{
+  "name": "magic-mirror",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --mode production",
+    "start": "npx webpack serve --mode development --open --hot"
+  },
+  "private": true,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "html-bundler-webpack-plugin": "^4.20.2",
+    "sass": "^1.89.0",
+    "sass-loader": "^16.0.5",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  }
+}
