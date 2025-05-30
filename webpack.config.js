@@ -1,5 +1,5 @@
 const path = require('path')
-const HtmlBundlerPlugin = require('html-bundler-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: './src/index.js',
@@ -8,10 +8,16 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new HtmlBundlerPlugin({
-        entry: {
-            index: 'src/index.html', 
-        }
-    })
-  ]
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+    ],
+  },
 }
