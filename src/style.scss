@@ -1,0 +1,25 @@
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+body {
+    display: grid; 
+    grid-template-columns: 2fr 1fr; 
+    gap: 2rem; 
+    padding: 2rem; 
+    font-family: 'Space Grotesk', sans-serif; 
+    font-weight: 200; 
+}
+
+.column-1 {
+     
+}
+
+.column-2 {
+    background-color: $secondary-color; 
+}
+h2 {
+    font-weight: 400; 
+    font-size: 1.25rem; 
+}
