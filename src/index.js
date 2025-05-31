@@ -3,23 +3,26 @@ import dateFormat from 'dateformat'
 
 document.addEventListener('DOMContentLoaded', () => {
   customMessage()
-  displayGoal()
   showDate()
   showTime()
   setInterval(showTime, 1000)
+
   var addTaskButton = document.getElementById('new-task')
   addTaskButton.style.display = "block"
   addTaskButton.textContent = "New Active Task"
 
+  var goalElement = document.getElementById('goal')
+  var savedGoal = localStorage.getItem('currentGoal');
+  goalElement.textContent = "Current Task: " + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set");
+
   addTaskButton.addEventListener('click', function() {
-      var goalElement = document.getElementById('goal')
-      var goal = prompt("Enter your goal:")
-      goalElement.textContent = "Current Task: " +(goal ? goal : "No task set")
+    var newGoal = prompt("Enter your goal:");
+    localStorage.setItem('currentGoal', newGoal ? newGoal : "");
+    goalElement.textContent = "Current Task: " + (newGoal && newGoal.length > 0 ? newGoal : "No task set");
   })
 })
 
 function displayGoal() {
-    var goal = "placeholder"
     var goalElement = document.getElementById('goal')
     goalElement.textContent = "Current Task: " + goal
 }
