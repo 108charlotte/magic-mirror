@@ -26,6 +26,8 @@ Useful tutorial on fetching events (once I had the boilerplate down from the las
 
 Guide specifically on how to filter (google documentation): https://developers.google.com/workspace/calendar/api/v3/reference/events/list
 
+stack overflow on how to check if a prompt is a certain datatype: https://stackoverflow.com/questions/62926510/how-would-i-check-if-a-prompt-is-a-string-number-boolean
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date
