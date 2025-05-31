@@ -28,6 +28,10 @@ Guide specifically on how to filter (google documentation): https://developers.g
 
 stack overflow on how to check if a prompt is a certain datatype: https://stackoverflow.com/questions/62926510/how-would-i-check-if-a-prompt-is-a-string-number-boolean
 
+how to have a select dropdown in a popup: https://stackoverflow.com/questions/24949285/drop-down-list-inside-a-pop-up-window-comes-up-when-button-is-pressed
+
+another article on the same thing: https://stackoverflow.com/questions/42180532/creating-a-pop-up-window-from-a-drop-down-box
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date

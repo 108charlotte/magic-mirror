@@ -1,3 +1,5 @@
+import './popup-style.scss';
+
 document.addEventListener("DOMContentLoaded", () => {
     var alarmButton = document.getElementById("alarm")
     var eventButton = document.getElementById("event")
@@ -9,30 +11,36 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTableData()
 
     alarmButton.addEventListener('click', function() {
-        var time = parseInt(prompt("What time are you waking up? "))
-        while (time == null) {
+        var time = prompt("What time are you waking up? ")
+        while (parseInt(time) == null) {
             alert("Please enter a valid integer. ")
-            time = parseInt(prompt("What time are you waking up? "))
+            time = prompt("What time are you waking up? ")
         }
-        if (time) {
-            var row = scheduleTable.insertRow(); 
-            switch (time) {
-                case "5": 
-                    row.insertCell(0).textContent = "5:00"
-                    break; 
-                case "4": 
-                    row.insertCell(0).textContent = "4:00"
-                    break; 
-                default: 
-                    row.insertCell(0).textContent = time; 
-            }
-            row.insertCell(1).textContent = "Wake up"
-            saveTableData(); 
+        var row = scheduleTable.insertRow(); 
+        switch (time) {
+            case "5": 
+                row.insertCell(0).textContent = "5:00"
+                break; 
+            case "4": 
+                row.insertCell(0).textContent = "4:00"
+                break; 
+            default: 
+                row.insertCell(0).textContent = time; 
         }
+        row.insertCell(1).textContent = "Wake up"
+        saveTableData(); 
     })
 
     eventButton.addEventListener('click', function() {
-        
+        fetch('/popup-with-dropdown.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('popup-content').innerHTML = html + '<button id="close-popup" style="position:absolute; top:10px; right:10px;">X</button>';
+                document.getElementById('popup-modal').style.display = 'flex';
+                document.getElementById('close-popup').onclick = function() {
+                document.getElementById('popup-modal').style.display = 'none';
+            }
+
     })
 
     focusButton.addEventListener('click', function() {
@@ -43,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem('scheduleTable')
         scheduleTable.innerHTML = ''
     })
+})
 
     function saveTableData() {
         const rows = []; 

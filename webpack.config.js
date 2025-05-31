@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -16,6 +17,11 @@ module.exports = {
       template: 'src/index.html',
       chunks: ['main', 'calendar', 'timeBlocking']
     }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'public', to: '.' }, 
+      ]
+    })
   ],
   module: {
     rules: [

@@ -22,11 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
-function displayGoal() {
-    var goalElement = document.getElementById('goal')
-    goalElement.textContent = "Current Task: " + goal
-}
-
 function customMessage() {
   var myDate = new Date()
   var hrs = myDate.getHours()
