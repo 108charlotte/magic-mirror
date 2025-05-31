@@ -32,6 +32,8 @@ how to have a select dropdown in a popup: https://stackoverflow.com/questions/24
 
 another article on the same thing: https://stackoverflow.com/questions/42180532/creating-a-pop-up-window-from-a-drop-down-box
 
+convert a string to a date: https://stackoverflow.com/questions/5619202/parsing-a-string-to-a-date-in-javascript
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date
