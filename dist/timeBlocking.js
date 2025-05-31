@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(()=>{document.getElementById("alarm"),document.getElementById("event"),document.getElementById("schedule-focus")}));

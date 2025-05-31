@@ -19,11 +19,13 @@ body {
      display: flex; 
      flex-direction: column; 
      border-radius: 10px; 
+     gap: 1rem; 
 }
 
-.column-2 {
-    background-color: rgba($secondary-color, 0.7); 
+#calendar, .time-blocking {
+    background-color: rgba($secondary-color, 0.6); 
     padding: 1rem; 
+    border-radius: 10px; 
 }
 
 #new-task {
@@ -52,7 +54,6 @@ h2 {
     align-items: center;
     min-height: 12vh;
     box-sizing: border-box;
-    // color: #fff;
     position: relative;
     font-size: 20px; 
 }
@@ -63,6 +64,7 @@ h2 {
     justify-content: center; 
     height: 100%; 
     line-height: 4rem; 
+    margin: 0 auto; 
 }
 
 
@@ -74,6 +76,50 @@ h2 {
 .clock-colon {
     margin: 0 0.25em; 
     display: inline-block; 
-
 }
-    
+
+.time-blocking {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+}
+
+.time-blocking button {
+    width: auto; 
+    margin-bottom: 0.75rem;
+}
+
+.time-blocking button:last-child {
+    margin-bottom: 0;
+}
+
+#schedule-table {
+  border-collapse: separate;
+  border-spacing: 2rem 0; 
+}
+
+#schedule-table th,
+#schedule-table td {
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+#schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: rgba($secondary-color, 0.8); 
+  border-radius: 10px; 
+}
+
+#schedule-table th {
+    background: white; 
+}
+
+#schedule-table th:first-child {
+  border-top-left-radius: 10px;
+}
+
+#schedule-table th:last-child {
+  border-top-right-radius: 10px;
+}

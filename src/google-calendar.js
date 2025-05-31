@@ -98,7 +98,7 @@ function handleAuthClick() {
 
     const events = response.result.items;
         if (!events || events.length == 0) {
-            document.getElementById('content').innerText = 'No events found.';
+            document.getElementById('content').innerText = 'No events today.';
             return;
         }
         // Flatten to string to display
