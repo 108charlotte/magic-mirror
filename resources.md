@@ -22,6 +22,10 @@ stack overflow on showing google calendar in a webpage (https://stackoverflow.co
 
 ALL google calendar API code from this tutorial: https://developers.google.com/workspace/calendar/api/quickstart/js (the one above--would def recommend following, really great to get smth solid down as a starting point and then go from there so that ur not stuck forever at the low level)
 
+Useful tutorial on fetching events (once I had the boilerplate down from the last tutorial, I wanted to understand how it was working so that I could manipulate it to just show events upcoming that day): https://www.youtube.com/watch?v=KjO1rhm8E3w
+
+Guide specifically on how to filter (google documentation): https://developers.google.com/workspace/calendar/api/v3/reference/events/list
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date

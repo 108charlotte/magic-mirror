@@ -76,14 +76,19 @@ function handleAuthClick() {
       // this is the part i am editing from the tutorial
     async function listUpcomingEvents() {
         let response;
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
         try {
             const request = {
-            'calendarId': 'primary',
-            'timeMin': (new Date()).toISOString(),
-            'showDeleted': false,
-            'singleEvents': true,
-            'maxResults': 10,
-            'orderBy': 'startTime',
+                'calendarId': 'primary',
+                'showDeleted': false,
+                'singleEvents': true,
+                'maxResults': 10,
+                'orderBy': 'startTime',
+                'timeMin': startOfDay.toISOString(), 
+                'timeMax': endOfDay.toISOString(),
             };
             response = await gapi.client.calendar.events.list(request);
         } catch (err) {
