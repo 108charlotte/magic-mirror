@@ -5,26 +5,30 @@ $secondary-color: #2ecc71;
 
 body {
     display: grid; 
-    grid-template-columns: 2fr 1fr; 
-    gap: 2rem; 
+    grid-template-columns: 1fr 1fr; 
     padding: 2rem; 
     font-weight: 200; 
+    gap: 1.5rem; 
 }
 
 * {
-    margin-bottom: 0.5rem; 
     font-family: 'Space Grotesk', sans-serif; 
 }
 
-/* for later styling
-.column-1 {
-     
+.column-1, .column-2 {
+     display: flex; 
+     flex-direction: column; 
+     border-radius: 10px; 
 }
 
 .column-2 {
-    background-color: $secondary-color; 
+    background-color: rgba($secondary-color, 0.7); 
+    padding: 1rem; 
 }
-    */
+
+#new-task {
+    margin-bottom: 0.75rem;
+}
 
 h2 {
     font-weight: 400; 
@@ -32,7 +36,7 @@ h2 {
 }
 
 .clock-container {
-    background: rgba(235, 0, 255, 0.15);
+    background: rgba($primary-color, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,11 +50,9 @@ h2 {
 .digital-clock {
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 30vh;
+    min-height: 12vh;
     box-sizing: border-box;
-    background: linear-gradient(45deg, #08001f, #30197d);
-    color: #fff;
+    // color: #fff;
     position: relative;
     font-size: 20px; 
 }
