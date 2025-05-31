@@ -18,6 +18,10 @@ grid guide on css if I need to reference it later: https://developer.mozilla.org
 
 used this tutorial for making a digital clock using CSS & HTML: https://www.youtube.com/watch?v=5tC46h022YE
 
+stack overflow on showing google calendar in a webpage (https://stackoverflow.com/questions/69636242/showing-a-users-google-calendar-in-a-webpage) led me to this documentation: https://developers.google.com/workspace/calendar/api/quickstart/js
+
+ALL google calendar API code from this tutorial: https://developers.google.com/workspace/calendar/api/quickstart/js (the one above--would def recommend following, really great to get smth solid down as a starting point and then go from there so that ur not stuck forever at the low level)
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date

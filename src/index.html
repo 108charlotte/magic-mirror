@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Magic Mirror</title>
-  
+  <script>
+  function gapiLoaded() { window._gapiLoaded && window._gapiLoaded(); }
+  function gisLoaded() { window._gisLoaded && window._gisLoaded(); }
+</script>
 </head>
 <body>
     <div class="column-1">
@@ -30,7 +33,11 @@
         </div>
     </div>
     <div class="column-2">
-        <div id="calendar"></div>
+        <div id="calendar">
+            <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
+            <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
+            <pre id="content" style="white-space: pre-wrap;"></pre>
+        </div>
     </div>
 </body>
 </html>
