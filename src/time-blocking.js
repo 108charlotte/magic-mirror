@@ -38,9 +38,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById('popup-content').innerHTML = html + '<button id="close-popup" style="position:absolute; top:10px; right:10px;">X</button>';
                 document.getElementById('popup-modal').style.display = 'flex';
                 document.getElementById('close-popup').onclick = function() {
-                document.getElementById('popup-modal').style.display = 'none';
-            }
+                    document.getElementById('popup-modal').style.display = 'none';
+                };
 
+                const select = document.getElementById("dropdown");
+                const durationBlock = document.getElementById("duration");
+                const endtimeBlock = document.getElementById("end-time");
+
+                select.addEventListener('change', function() {
+                    if (select.value === 'duration-dropdown') {
+                        durationBlock.style.display = '';
+                        endtimeBlock.style.display = 'none';
+                    } else if (select.value === 'endtime-dropdown') {
+                        durationBlock.style.display = 'none';
+                        endtimeBlock.style.display = '';
+                    }
+                })
+            })
     })
 
     focusButton.addEventListener('click', function() {
@@ -71,4 +85,3 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
-})
