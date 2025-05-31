@@ -12,9 +12,8 @@ body {
     font-weight: 200; 
 }
 
-#current-task button {
+* {
     margin-bottom: 0.5rem; 
-    font-family: 'Space Grotesk', sans-serif; 
 }
 
 .column-1 {
@@ -24,7 +23,53 @@ body {
 .column-2 {
     background-color: $secondary-color; 
 }
+
 h2 {
     font-weight: 400; 
     font-size: 1.25rem; 
 }
+
+.clock-container {
+    background: rgba(235, 0, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem; 
+    width: 12rem; 
+    border-radius: 10px; 
+    backdrop-filter: blur(); 
+    text-align: center; 
+}
+
+.digital-clock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30vh;
+    box-sizing: border-box;
+    background: linear-gradient(45deg, #08001f, #30197d);
+    color: #fff;
+    position: relative;
+    font-size: 20px; 
+}
+
+.clock {
+    display: flex; 
+    gap: 0.25em; 
+    justify-content: center; 
+    height: 100%; 
+    line-height: 4rem; 
+}
+
+
+#hours, #minutes, #seconds, #am-pm {
+    width: 2ch; 
+    text-align: center;
+}
+
+.clock-colon {
+    margin: 0 0.25em; 
+    display: inline-block; 
+
+}
+    

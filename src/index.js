@@ -1,20 +1,21 @@
 import './style.scss'
 import dateFormat from 'dateformat'
 
-customMessage()
-displayGoal()
-showDate()
-showTime()
-setInterval(showTime, 1000)
+document.addEventListener('DOMContentLoaded', () => {
+  customMessage()
+  displayGoal()
+  showDate()
+  showTime()
+  setInterval(showTime, 1000)
+  var addTaskButton = document.getElementById('new-task')
+  addTaskButton.style.display = "block"
+  addTaskButton.textContent = "New Active Task"
 
-var addTaskButton = document.getElementById('new-task')
-addTaskButton.style.display = "block"
-addTaskButton.textContent = "New Active Task"
-
-addTaskButton.addEventListener('click', function() {
-    var goalElement = document.getElementById('goal')
-    var goal = prompt("Enter your goal:")
-    goalElement.textContent = "Current Task: " +(goal ? goal : "No task set")
+  addTaskButton.addEventListener('click', function() {
+      var goalElement = document.getElementById('goal')
+      var goal = prompt("Enter your goal:")
+      goalElement.textContent = "Current Task: " +(goal ? goal : "No task set")
+  })
 })
 
 function displayGoal() {
@@ -47,7 +48,10 @@ function customMessage() {
 function showTime() {
     var date = new Date()
     var formattedTime = dateFormat(date, "h:MM:ss TT")
-    document.getElementById('time').textContent = "Current Time: " + formattedTime
+    document.getElementById('hours').textContent = dateFormat(date, "h")
+    document.getElementById('minutes').textContent = dateFormat(date, "MM")
+    document.getElementById('seconds').textContent = dateFormat(date, "ss")
+    document.getElementById('am-pm').textContent = dateFormat(date, "TT")
 }
 
 function showDate() {

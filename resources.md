@@ -16,6 +16,8 @@ display date prettily: https://stackoverflow.com/questions/3552461/how-do-i-form
 
 grid guide on css if I need to reference it later: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout
 
+used this tutorial for making a digital clock using CSS & HTML: https://www.youtube.com/watch?v=5tC46h022YE
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date
