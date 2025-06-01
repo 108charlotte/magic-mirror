@@ -227,6 +227,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     var row = scheduleTable.insertRow()
 
                     row.classList.add('focus-row')
+                    row.classList.add(currDay)
+                    if (objective.length == 0) {
+                        alert("Please enter an objective.")
+                        return
+                    }
 
                     row.insertCell(0).textContent = startTime
                     row.insertCell(1).textContent = endTimeValue
