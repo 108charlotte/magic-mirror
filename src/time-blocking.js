@@ -5,11 +5,37 @@ document.addEventListener("DOMContentLoaded", () => {
     var eventButton = document.getElementById("event")
     var focusButton = document.getElementById("schedule-focus")
     var resetButton = document.getElementById("reset-table")
+    var viewTomorrow = document.getElementById("view-tomorrow")
+    var viewToday = document.getElementById("view-today")
+
+    var currDay = "today"
 
     var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
 
     loadTableData()
     sortTableByStartTime()
+    highlightOverlaps()
+
+    viewTomorrow.addEventListener('click', function(event) {
+        currDay = "tomorrow"
+        filterRowsByDay()
+    })
+
+    viewToday.addEventListener('click', function(event) {
+        currDay = "today"
+        filterRowsByDay()
+    })
+
+    function filterRowsByDay() {
+        for (let row of scheduleTable.rows) {
+            if (row.classList.contains(currDay)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
     if (!window.alarmListenerAdded) {
         alarmButton.addEventListener('click', function() {
             console.log("Alarm button clicked")
@@ -32,14 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
             // sets up ability to change row values
             changeVals(row)
             row.classList.add('alarm-row')
+            row.classList.add(currDay)
 
             var row2 = scheduleTable.insertRow()
             row2.insertCell(0).textContent = addMinsToTime(time, 45)
             row2.insertCell(1).textContent = addMinsToTime(time, 75)
             row2.insertCell(2).textContent = "Breakfast"
 
+            // sets up ability to change row values
             changeVals(row2)
             row2.classList.add('alarm-row')
+            row2.classList.add(currDay)
 
             sortTableByStartTime()
             saveTableData()
@@ -99,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     row.insertCell(2).textContent = eventName
 
                     changeVals(row)
+                    row.classList.add(currDay)
 
                     console.log('Event addition form submitted')
                     document.getElementById('popup-modal').style.display = 'none'
@@ -222,7 +252,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const cells = Array.from(tr.cells).map(td => td.textContent)
             const isFocusRow = tr.classList.contains('focus-row')
             const isAlarmRow = tr.classList.contains('alarm-row')
-            rows.push({cells, isFocusRow, isAlarmRow})
+            const isToday = tr.classList.contains('today')
+            const isTomorrow = tr.classList.contains('tomorrow')
+            rows.push({cells, isFocusRow, isAlarmRow, isToday, isTomorrow})
         }
         localStorage.setItem('scheduleTable', JSON.stringify(rows))
     }
@@ -235,14 +267,13 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let cellData of rowData.cells) {
                 row.insertCell().textContent = cellData
             }
-            if (rowData.isFocusRow) {
-                row.classList.add('focus-row')
-            }
-            if (rowData.isAlarmRow) {
-                row.classList.add('alarm-row')
-            }
+            if (rowData.isFocusRow) row.classList.add('focus-row')
+        if (rowData.isAlarmRow) row.classList.add('alarm-row')
+        if (rowData.isToday) row.classList.add('today')
+        if (rowData.isTomorrow) row.classList.add('tomorrow')
             changeVals(row)
         }
+        filterRowsByDay()
     }
 
     function sortTableByStartTime() {
@@ -261,7 +292,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function highlightOverlaps() {
         let prevEndTime = null
-        for (let row of scheduleTable.rows) {
+        const dayRows = Array.from(scheduleTable.rows).filter(row => row.classList.contains(currDay))
+        for (let row of dayRows) {
             row.classList.remove('overlap')
             const startTime = row.cells[0].textContent
             const endTime = row.cells[1].textContent

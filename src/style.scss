@@ -100,20 +100,18 @@ h2 {
 #schedule-table {
   border-collapse: separate;
   border-spacing: 2rem 0; 
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: rgba($secondary-color, 0.8); 
+  border-radius: 10px; 
+  margin-bottom: 1rem; 
 }
 
 #schedule-table th,
 #schedule-table td {
   padding: 0.5rem 1rem;
   text-align: left;
-}
-
-#schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background: rgba($secondary-color, 0.8); 
-  border-radius: 10px; 
 }
 
 #schedule-table th {
