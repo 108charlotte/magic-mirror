@@ -12,13 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
   addTaskButton.textContent = "New Active Task"
 
   var goalElement = document.getElementById('goal')
-  var savedGoal = localStorage.getItem('currentGoal');
-  goalElement.textContent = "Current Task: " + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set");
+  var savedGoal = localStorage.getItem('currentGoal')
+  goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
 
   addTaskButton.addEventListener('click', function() {
-    var newGoal = prompt("Enter your goal:");
-    localStorage.setItem('currentGoal', newGoal ? newGoal : "");
-    goalElement.textContent = "Current Task: " + (newGoal && newGoal.length > 0 ? newGoal : "No task set");
+    var newGoal = prompt("Enter your goal:")
+    localStorage.setItem('currentGoal', newGoal ? newGoal : "")
+    goalElement.innerHTML = 'Current Task: <span class="task-text">' + (newGoal && newGoal.length > 0 ? newGoal : "No task set") + '</span>'
+  })
+
+  goalElement.addEventListener('click', function() {
+    crossOffTask()
   })
 })
 
@@ -56,4 +60,18 @@ function showDate() {
     var now = new Date();
     var formattedDate = dateFormat(now, "dddd, mmmm dS, yyyy");
     document.getElementById('date').textContent = "Current Date: " + formattedDate;
+}
+
+function crossOffTask() {
+  var taskSpan = document.querySelector('#goal .task-text')
+  if (!taskSpan) return
+  if (taskSpan.style.textDecoration === "line-through") {
+    taskSpan.style.textDecoration = "none"
+    taskSpan.style.color = "black"
+  } else if (taskSpan.textContent !== "No task set") {
+    taskSpan.style.textDecoration = "line-through"
+    taskSpan.style.color = "gray"
+  } else {
+    alert("Please set a task first.")
+  }
 }
