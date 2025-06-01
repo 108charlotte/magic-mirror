@@ -22,9 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
   var savedGoal = localStorage.getItem('currentGoal')
   goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
 
+  var taskSpan = goalElement.querySelector('.task-text')
+  var taskCrossedOff = localStorage.getItem('taskCrossedOff')
+  if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
+    taskSpan.style.textDecoration = "line-through";
+    taskSpan.style.color = "gray";
+  }
+
   addTaskButton.addEventListener('click', function() {
     var newGoal = prompt("Enter your goal:")
     localStorage.setItem('currentGoal', newGoal ? newGoal : "")
+    localStorage.setItem('taskCrossedOff', 'false')
     goalElement.innerHTML = 'Current Task: <span class="task-text">' + (newGoal && newGoal.length > 0 ? newGoal : "No task set") + '</span>'
   })
 
@@ -75,9 +83,11 @@ function crossOffTask() {
   if (taskSpan.style.textDecoration === "line-through") {
     taskSpan.style.textDecoration = "none"
     taskSpan.style.color = "black"
+    localStorage.setItem('taskCrossedOff', 'false')
   } else if (taskSpan.textContent !== "No task set") {
     taskSpan.style.textDecoration = "line-through"
     taskSpan.style.color = "gray"
+    localStorage.setItem('taskCrossedOff', 'true')
   } else {
     alert("Please set a task first.")
   }
