@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadTableData()
 
+    for (let row of scheduleTable.rows) {
+        changeVals(row)
+    }
+
     alarmButton.addEventListener('click', function() {
         var time = prompt("What time are you waking up? ")
         while (parseInt(time) == null) {
@@ -23,6 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
         row.insertCell(0).textContent = time
         row.insertCell(1).textContent = addMinsToTime(time, 30)
         row.insertCell(2).textContent = "Wake up, brush teeth, walk"
+
+        changeVals(row)
+
         saveTableData()
     })
 
@@ -72,9 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     var row = scheduleTable.insertRow()
-                    row.insertCell(0).textContent = startTime
-                    row.insertCell(1).textContent = endTimeValue
-                    row.insertCell(2).textContent = eventName
+
+                    changeVals(row)
 
                     console.log('Event addition form submitted')
                     document.getElementById('popup-modal').style.display = 'none'
@@ -83,6 +89,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
             })
     })
+
+    function changeVals(row) {
+
+        function changeVal(cell) {
+            if (cell.querySelector('input')) return
+
+            const currVal = cell.textContent
+            const input = document.createElement('input')
+            input.type = 'text'
+            input.value = currVal
+            input.style.width = '4em'
+            cell.textContent = ''
+            cell.appendChild(input)
+            input.focus()
+
+            function save() {
+                cell.textContent = input.value
+                saveTableData()
+            }
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    save()
+                } else if (e.key === 'Escape') {
+                    cell.textContent = currVal
+                }
+            })
+            input.addEventListener('blur', save)
+        }
+
+        var startTimeCell = row.cells[0]
+        var endTimeCell = row.cells[1]
+        var eventNameCell = row.cells[2]
+        startTimeCell.addEventListener('click', function() { changeVal(startTimeCell) })
+        endTimeCell.addEventListener('click', function() { changeVal(endTimeCell) })
+        eventNameCell.addEventListener('click', function() { changeVal(eventNameCell) })
+    }
 
     focusButton.addEventListener('click', function() {
         
