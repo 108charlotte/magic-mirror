@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
 
     loadTableData()
+    sortTableByStartTime()
 
     for (let row of scheduleTable.rows) {
         changeVals(row)
@@ -16,9 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     alarmButton.addEventListener('click', function() {
         var time = prompt("What time are you waking up? ")
-        while (parseInt(time) == null) {
+        const timePattern = /^\d{1,2}(:[0-5]\d)?$/;
+        if (time == null) return
+        while (time !== null && (!timePattern.test(time.trim()))) {
             alert("Please enter a valid integer. ")
             time = prompt("What time are you waking up? ")
+            if (time == null) return
         }
         if (time.length == 1) {
             time += ":00"
@@ -28,9 +32,19 @@ document.addEventListener("DOMContentLoaded", () => {
         row.insertCell(1).textContent = addMinsToTime(time, 30)
         row.insertCell(2).textContent = "Wake up, brush teeth, walk"
 
+        // sets up ability to change row values
         changeVals(row)
+        row.classList.add('alarm-row')
 
-        saveTableData()
+        var row2 = scheduleTable.insertRow()
+        row2.insertCell(0).textContent = addMinsToTime(time, 45)
+        row2.insertCell(1).textContent = addMinsToTime(time, 75)
+        row2.insertCell(2).textContent = "Breakfast"
+
+        changeVals(row2)
+        row2.classList.add('alarm-row')
+
+        sortTableByStartTime()
     })
 
     eventButton.addEventListener('click', function() {
@@ -41,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById('popup-modal').style.display = 'flex'
                 document.getElementById('close-popup').onclick = function() {
                     document.getElementById('popup-modal').style.display = 'none'
-                };
+                }
 
                 const select = document.getElementById("dropdown")
                 const durationBlock = document.getElementById("duration")
@@ -80,12 +94,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     var row = scheduleTable.insertRow()
 
+                    row.insertCell(0).textContent = startTime
+                    row.insertCell(1).textContent = endTimeValue
+                    row.insertCell(2).textContent = eventName
+
                     changeVals(row)
 
                     console.log('Event addition form submitted')
                     document.getElementById('popup-modal').style.display = 'none'
 
-                    saveTableData()
+                    sortTableByStartTime()
                 })
             })
     })
@@ -106,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             function save() {
                 cell.textContent = input.value
-                saveTableData()
+                sortTableByStartTime()
             }
 
             input.addEventListener('keydown', function(e) {
@@ -128,7 +146,66 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     focusButton.addEventListener('click', function() {
-        
+        fetch('/popup-with-dropdown-focus.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('popup-content').innerHTML = html + '<button id="close-popup" style="position:absolute; top:10px; right:10px;">X</button>'
+                document.getElementById('popup-modal').style.display = 'flex'
+                document.getElementById('close-popup').onclick = function() {
+                    document.getElementById('popup-modal').style.display = 'none'
+                }
+
+                const select = document.getElementById("dropdown")
+                const durationBlock = document.getElementById("duration")
+                const endtimeBlock = document.getElementById("end-time")
+
+                select.addEventListener('change', function() {
+                    if (select.value === 'duration-dropdown') {
+                        durationBlock.style.display = ''
+                        endtimeBlock.style.display = 'none'
+                    } else if (select.value === 'endtime-dropdown') {
+                        durationBlock.style.display = 'none'
+                        endtimeBlock.style.display = ''
+                    }
+                })
+
+                const form = document.querySelector('#popup-content form')
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault()
+                    
+                    const objective = document.getElementById('objective').value
+                    var startTime = document.getElementById('start-time').value
+
+                    if (startTime.length == 1) {
+                        startTime += ":00"
+                    }
+
+                    const type = document.getElementById('dropdown').value
+                    var endTimeValue = document.getElementById('end-time-input').value
+                    const durationValue = document.getElementById('duration-input').value
+
+                    console.log("durationValue: " + durationValue)
+
+                    if (type == "duration-dropdown") {
+                        endTimeValue = addMinsToTime(startTime, durationValue)
+                    }
+
+                    var row = scheduleTable.insertRow()
+
+                    row.classList.add('focus-row')
+
+                    row.insertCell(0).textContent = startTime
+                    row.insertCell(1).textContent = endTimeValue
+                    row.insertCell(2).textContent = objective
+
+                    changeVals(row)
+
+                    console.log('Focus scheduling form submitted')
+                    document.getElementById('popup-modal').style.display = 'none'
+
+                    sortTableByStartTime()
+                })
+            })
     })
 
     resetButton.addEventListener('click', function() {
@@ -140,7 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const rows = []; 
         for (let tr of scheduleTable.rows) {
             const cells = Array.from(tr.cells).map(td => td.textContent)
-            rows.push(cells); 
+            const isFocusRow = tr.classList.contains('focus-row')
+            const isAlarmRow = tr.classList.contains('alarm-row')
+            rows.push({cells, isFocusRow, isAlarmRow})
         }
         localStorage.setItem('scheduleTable', JSON.stringify(rows))
     }
@@ -149,10 +228,51 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = JSON.parse(localStorage.getItem('scheduleTable') || '[]')
         for (let rowData of data) {
             const row = scheduleTable.insertRow()
-            for (let cellData of rowData) {
+            for (let cellData of rowData.cells) {
                 row.insertCell().textContent = cellData
             }
+            if (rowData.isFocusRow) {
+                row.classList.add('focus-row')
+            }
+            if (rowData.isAlarmRow) {
+                row.classList.add('alarm-row')
+            }
+            changeVals(row)
         }
+    }
+
+    function sortTableByStartTime() {
+        let rows = Array.from(scheduleTable.rows)
+        rows.sort((a, b) => {
+            const timeA = a.cells[0].textContent.padStart(5, '0')
+            const timeB = b.cells[0].textContent.padStart(5, '0')
+            return timeA.localeCompare(timeB)
+        })
+        scheduleTable.innerHTML = ''
+        for (let row of rows) {
+            scheduleTable.appendChild(row)
+        }
+        highlightOverlaps()
+        saveTableData()
+    }
+
+    function highlightOverlaps() {
+        let prevEndTime = null
+        for (let row of scheduleTable.rows) {
+            row.classList.remove('overlap')
+            const startTime = row.cells[0].textContent
+            const endTime = row.cells[1].textContent
+            if (prevEndTime && compareTimes(startTime, prevEndTime) < 0) {
+                row.classList.add('overlap')
+            }
+            prevEndTime = endTime
+        }
+    }
+
+    function compareTimes(a, b) {
+        const [ha, ma] = a.split(':').map(Number);
+        const [hb, mb] = b.split(':').map(Number);
+        return (ha * 60 + ma) - (hb * 60 + mb);
     }
 
     function addMinsToTime(timeStr, minsToAdd) {

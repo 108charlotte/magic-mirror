@@ -123,3 +123,27 @@ h2 {
 #schedule-table th:last-child {
   border-top-right-radius: 10px;
 }
+
+#schedule-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+#schedule-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+#schedule-table tr + tr {
+  border-top: 2px solid rgba(0,0,0,0.15);
+}
+
+.focus-row {
+  background-color: rgba(#ffeaa7, 0.9);
+}
+
+.alarm-row {
+    background-color: rgba(#145a32, 0.3); 
+}
+
+.overlap {
+    background-color: rgb(237, 91, 91);
+}
