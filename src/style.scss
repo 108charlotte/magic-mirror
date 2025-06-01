@@ -1,5 +1,6 @@
 $primary-color: #3498db;
 $secondary-color: #2ecc71;
+$complimentary-color: #145a32; 
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -38,7 +39,10 @@ h2 {
 }
 
 .clock-container {
-    background: rgba($primary-color, 0.4);
+    background: #ffe066; // deeper, more visible yellow
+    color: #222;
+    border: 2.5px solid #bfa800;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,7 +145,7 @@ h2 {
 }
 
 .alarm-row {
-    background-color: rgba(#145a32, 0.3); 
+    background-color: rgba($complimentary-color, 0.3); 
 }
 
 .overlap {
