@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     sortTableByStartTime()
     highlightOverlaps()
 
+    scheduleMidnightRollover()
+
     viewTomorrow.addEventListener('click', function(event) {
         currDay = "tomorrow"
         filterRowsByDay()
@@ -329,6 +331,35 @@ document.addEventListener("DOMContentLoaded", () => {
         let newMins = totalMins % 60
 
         return `${String(newHrs)}:${String(newMins).padStart(2, "0")}`
+    }
+
+    function newDay() {
+        for (let row of Array.from(scheduleTable.rows)) {
+            if (row.classList.contains("today")) {
+                scheduleTable.deleteRow(row.rowIndex-1)
+            }
+        }
+
+        for (let row of Array.from(scheduleTable.rows)) {
+            if (row.classList.contains('tomorrow')) {
+                row.classList.remove('tomorrow');
+                row.classList.add('today');
+            }
+        }
+
+        saveTableData()
+        filterRowsByDay()
+    }
+
+    function scheduleMidnightRollover() {
+        const now = new Date()
+        const millisTillMidnight = new Date(
+            now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0
+        ) - now
+        setTimeout(function() {
+            newDay()
+            setInterval(newDay, 24 * 60 * 60 * 1000)
+        }, millisTillMidnight)
     }
 })
 
