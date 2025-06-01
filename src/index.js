@@ -1,11 +1,18 @@
 import './style.scss'
 import dateFormat from 'dateformat'
+import { highlightCurrentEvent } from './time-blocking.js'
 
 document.addEventListener('DOMContentLoaded', () => {
   customMessage()
   showDate()
   showTime()
-  setInterval(showTime, 1000)
+  
+  var time = new Date()
+
+  setInterval(function() {
+    showTime()
+    highlightCurrentEvent(time)
+  }, 1000)
 
   var addTaskButton = document.getElementById('new-task')
   addTaskButton.style.display = "block"

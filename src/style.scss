@@ -137,7 +137,7 @@ h2 {
 }
 
 .focus-row {
-  background-color: rgba(#ffeaa7, 0.9);
+  background-color: rgba(#daddff, 1);
 }
 
 .alarm-row {
@@ -146,4 +146,9 @@ h2 {
 
 .overlap {
     background-color: rgb(237, 91, 91);
+}
+
+.current-event {
+    background-color: rgba(#fff347, 1);
+    color: #222
 }

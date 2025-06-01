@@ -10,42 +10,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadTableData()
     sortTableByStartTime()
+    if (!window.alarmListenerAdded) {
+        alarmButton.addEventListener('click', function() {
+            console.log("Alarm button clicked")
+            const timePattern = /^\d{1,2}(:[0-5]\d)?$/
+            let time
+            while (true) {
+                time = prompt("What time are you waking up? ")
+                if (time === null) return
+                if (timePattern.test(time.trim())) break
+                alert("Please enter a valid time in H:MM format (e.g., 7:30 or 7).")
+            }
+            if (time.length == 1) {
+                time += ":00"
+            }
+            var row = scheduleTable.insertRow()
+            row.insertCell(0).textContent = time
+            row.insertCell(1).textContent = addMinsToTime(time, 30)
+            row.insertCell(2).textContent = "Wake up, brush teeth, walk"
 
-    for (let row of scheduleTable.rows) {
-        changeVals(row)
+            // sets up ability to change row values
+            changeVals(row)
+            row.classList.add('alarm-row')
+
+            var row2 = scheduleTable.insertRow()
+            row2.insertCell(0).textContent = addMinsToTime(time, 45)
+            row2.insertCell(1).textContent = addMinsToTime(time, 75)
+            row2.insertCell(2).textContent = "Breakfast"
+
+            changeVals(row2)
+            row2.classList.add('alarm-row')
+
+            sortTableByStartTime()
+            saveTableData()
+        })
     }
-
-    alarmButton.addEventListener('click', function() {
-        var time = prompt("What time are you waking up? ")
-        const timePattern = /^\d{1,2}(:[0-5]\d)?$/;
-        if (time == null) return
-        while (time !== null && (!timePattern.test(time.trim()))) {
-            alert("Please enter a valid integer. ")
-            time = prompt("What time are you waking up? ")
-            if (time == null) return
-        }
-        if (time.length == 1) {
-            time += ":00"
-        }
-        var row = scheduleTable.insertRow()
-        row.insertCell(0).textContent = time
-        row.insertCell(1).textContent = addMinsToTime(time, 30)
-        row.insertCell(2).textContent = "Wake up, brush teeth, walk"
-
-        // sets up ability to change row values
-        changeVals(row)
-        row.classList.add('alarm-row')
-
-        var row2 = scheduleTable.insertRow()
-        row2.insertCell(0).textContent = addMinsToTime(time, 45)
-        row2.insertCell(1).textContent = addMinsToTime(time, 75)
-        row2.insertCell(2).textContent = "Breakfast"
-
-        changeVals(row2)
-        row2.classList.add('alarm-row')
-
-        sortTableByStartTime()
-    })
+    window.alarmListenerAdded = true
 
     eventButton.addEventListener('click', function() {
         fetch('/popup-with-dropdown.html')
@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById('popup-modal').style.display = 'none'
 
                     sortTableByStartTime()
+                    saveTableData()
                 })
             })
     })
@@ -125,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
             function save() {
                 cell.textContent = input.value
                 sortTableByStartTime()
+                saveTableData()
             }
 
             input.addEventListener('keydown', function(e) {
@@ -204,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById('popup-modal').style.display = 'none'
 
                     sortTableByStartTime()
+                    saveTableData()
                 })
             })
     })
@@ -225,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function loadTableData() {
+        scheduleTable.innerHTML = ''
         const data = JSON.parse(localStorage.getItem('scheduleTable') || '[]')
         for (let rowData of data) {
             const row = scheduleTable.insertRow()
@@ -253,7 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
             scheduleTable.appendChild(row)
         }
         highlightOverlaps()
-        saveTableData()
     }
 
     function highlightOverlaps() {
@@ -296,3 +299,30 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${String(newHrs)}:${String(newMins).padStart(2, "0")}`
     }
 })
+
+export function highlightCurrentEvent(currTime) {
+    const mins = currTime.getHours() * 60 + currTime.getMinutes()
+
+    // shouldn't cause any issues since its inside of index.js's DOMContentLoaded
+    var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+
+    for (let row of scheduleTable.rows) {
+        var startTime = row.cells[0].textContent
+        var endTime = row.cells[1].textContent
+        
+        // convert everything to minutes so i can compare directly
+        const startMins = timeStrToMins(startTime)
+        const endMins = timeStrToMins(endTime)
+
+        if (mins >= startMins && mins < endMins) {
+            row.classList.add("current-event")
+        } else {
+            row.classList.remove("current-event")
+        }
+    }
+
+    function timeStrToMins(str) {
+        const [h, m] = str.split(':').map(Number);
+        return h * 60 + m;
+    }
+}
