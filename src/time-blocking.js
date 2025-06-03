@@ -314,6 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
             scheduleTable.appendChild(row)
         }
         highlightOverlaps()
+        updateTableRounding()
     }
 
     function highlightOverlaps() {
