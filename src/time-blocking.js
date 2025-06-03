@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 row.style.display = 'none';
             }
         }
+        updateTableRounding()
     }
 
     if (!window.alarmListenerAdded) {
@@ -60,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 isTomorrow: currDay === "tomorrow",
             }
 
-            addNewRow(time + " AM", addMinsToTime(time, 30) + " AM", "Wake up, brush teeth, walk", classes1)
+            addNewRow(time + " AM", addMinsToTime(time, 30), "Wake up, brush teeth, walk", classes1)
 
             const classes2 = {
                 isAlarmRow: true, 
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 isTomorrow: currDay === "tomorrow",
             }
 
-            addNewRow(addMinsToTime(time, 45) + " AM", addMinsToTime(time, 75) + " AM", "Breakfast", classes2)
+            addNewRow(addMinsToTime(time, 45), addMinsToTime(time, 75), "Breakfast", classes2)
 
             sortTableByStartTime()
             saveTableData()
@@ -270,8 +271,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     resetButton.addEventListener('click', function() {
-        localStorage.removeItem('scheduleTable')
-        scheduleTable.innerHTML = ''
+        for (let row of Array.from(scheduleTable.rows)) {
+            if (row.classList.contains(currDay)) {
+                scheduleTable.deleteRow(row.rowIndex - 1)
+            }
+        }
+        saveTableData()
     })
 
     function saveTableData() {
@@ -326,23 +331,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function highlightOverlaps() {
-        let prevEndTime = null
-        const dayRows = Array.from(scheduleTable.rows).filter(row => row.classList.contains(currDay))
+        const dayRows = Array.from(scheduleTable.rows)
+            .filter(row => row.classList.contains(currDay))
+            .sort((a, b) => timeStrToMins(a.cells[0].textContent) - timeStrToMins(b.cells[0].textContent))
+
         for (let row of dayRows) {
             row.classList.remove('overlap')
-            const startTime = row.cells[0].textContent
-            const endTime = row.cells[1].textContent
-            if (prevEndTime && timeStrToMins(startTime) < timeStrToMins(prevEndTime)) {
-                row.classList.add('overlap')
+        }
+
+        for (let i = 0; i < dayRows.length; i++) {
+            const row1 = dayRows[i]
+            const start1 = timeStrToMins(row1.cells[0].textContent)
+            const end1 = timeStrToMins(row1.cells[1].textContent)
+
+            for (let j = 0; j < dayRows.length; j++) {
+                if (i === j) continue
+                const row2 = dayRows[j]
+                const start2 = timeStrToMins(row2.cells[0].textContent)
+                const end2 = timeStrToMins(row2.cells[1].textContent)
+
+                if (start1 < end2 && start2 < end1) {
+                    row1.classList.add('overlap')
+                    row2.classList.add('overlap')
+                }
             }
-            prevEndTime = endTime
         }
     }
 
-    function compareTimes(a, b) {
-        const [ha, ma] = a.split(':').map(Number);
-        const [hb, mb] = b.split(':').map(Number);
-        return (ha * 60 + ma) - (hb * 60 + mb);
+    // updates which row has the tag for being the last row, important for css rounding to make the bottom of the table rounded like the top
+    function updateTableRounding() {
+        for (let row of scheduleTable.rows) {
+            row.classList.remove('last-visible-row');
+        }
+        
+        // makes sure its only checking today or tomorrow/whatever ur on
+        const visibleRows = Array.from(scheduleTable.rows).filter(row => row.style.display !== 'none');
+        if (visibleRows.length > 0) {
+            visibleRows[visibleRows.length - 1].classList.add('last-visible-row');
+        }
     }
 
     function addMinsToTime(timeStr, minsToAdd) {
@@ -368,6 +394,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return `${newH}:${String(newM).padStart(2, "0")} ${newAMPM}`
     }
 
+
+    // called at midnight, initiates rollover logic from last day to current day
     function newDay() {
         for (let row of Array.from(scheduleTable.rows)) {
             if (row.classList.contains("today")) {
@@ -420,6 +448,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isOldEvent) row.classList.add('old-event')
 
         changeVals(row)
+        updateTableRounding()
         return row
     }
 
@@ -456,16 +485,16 @@ export function greyoutPastEvents(currTime) {
         }
         
         // convert everything to minutes so i can compare directly
-        const endMins = timeStrToMins(endTime);
+        const endMins = timeStrToMins(endTime)
         if (isNaN(endMins)) {
-            row.classList.remove("old-event");
-            continue;
+            row.classList.remove("old-event")
+            continue
         }
 
-        if (mins >= endMins) {
-            row.classList.add("old-event");
+        if (mins >= endMins && !row.classList.contains("tomorrow")) {
+            row.classList.add("old-event")
         } else {
-            row.classList.remove("old-event");
+            row.classList.remove("old-event")
         }
     }
 }

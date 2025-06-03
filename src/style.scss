@@ -126,14 +126,6 @@ h2 {
   border-top-right-radius: 10px;
 }
 
-#schedule-table tr:last-child td:first-child {
-  border-bottom-left-radius: 10px;
-}
-
-#schedule-table tr:last-child td:last-child {
-  border-bottom-right-radius: 10px;
-}
-
 #schedule-table tr + tr {
   border-top: 2px solid rgba(0,0,0,0.15);
 }
@@ -146,15 +138,22 @@ h2 {
     background-color: rgba($complimentary-color, 0.3); 
 }
 
-.overlap, .overlap td {
-    background-color: rgb(237, 91, 91);
-}
-
 .current-event, .current-event td {
     background-color: rgba(#fff347, 1);
     color: #222
 }
 
+.overlap, .overlap td {
+    background-color: rgb(237, 91, 91);
+}
+
 .old-event, .old-event td {
-    background-color: rgba(#747474, 0.8);
+    background-color: rgba(#747474, 0.8) !important;
+}
+
+.last-visible-row td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.last-visible-row td:last-child {
+  border-bottom-right-radius: 10px;
 }
