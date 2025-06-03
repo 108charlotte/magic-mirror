@@ -1,4 +1,5 @@
 import './popup-style.scss'
+const PATH = '/magic-mirror/'
 
 document.addEventListener("DOMContentLoaded", () => {
     var alarmButton = document.getElementById("alarm")
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.alarmListenerAdded = true
 
     eventButton.addEventListener('click', function() {
-        fetch('/popup-with-dropdown.html')
+        fetch(PATH + 'popup-with-dropdown.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('popup-content').innerHTML = html + '<button id="close-popup" style="position:absolute; top:10px; right:10px;">X</button>'
@@ -124,7 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("durationValue: " + durationValue)
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(startTime, durationValue)
+                        endTimeValue = addMinsToTime(
+                            startTime + (startTimeAMPM ? " " + startTimeAMPM.value : ""),
+                            durationValue
+                        )
                     }
 
                     let eventClasses = {
@@ -182,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     focusButton.addEventListener('click', function() {
-        fetch('/popup-with-dropdown-focus.html')
+        fetch(PATH + 'popup-with-dropdown-focus.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('popup-content').innerHTML = html + '<button id="close-popup" style="position:absolute; top:10px; right:10px;">X</button>'
@@ -210,20 +214,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     event.preventDefault()
                     
                     const objective = document.getElementById('objective').value
-                    var startTime = document.getElementById('start-time').value
-
-                    var postfix = ""
-
-                    if (/\s?(AM|PM)$/i.test(startTime)) {
-                        postfix = startTime.match(/\s?(AM|PM)$/i)[0]
-                    }
-
-                    startTime = startTime.replace(/\s?(AM|PM)$/i, "")
-
+                    let startTime = document.getElementById('start-time').value.replace(/\s?(AM|PM)$/i, "")
                     if (startTime.length == 1) {
                         startTime += ":00"
                     }
-
                     const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
                     const endTimeAMPM = document.getElementById("end-time-am-pm-dropdown")
 
@@ -236,7 +230,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("durationValue: " + durationValue)
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(startTime, durationValue)
+                        endTimeValue = addMinsToTime(
+                            startTime + (startTimeAMPM ? " " + startTimeAMPM.value : ""),
+                            durationValue
+                        )
                     }
 
                     if (objective.length == 0) {
@@ -456,7 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let imgCell = row.cells[3] ? row.cells[3] : row.insertCell(3)
 
         let img = document.createElement("img")
-        img.src = "/assets/trash-can-icon.svg"
+        img.src = PATH + "assets/trash-can-icon.svg"
         img.style.width = "1.5em"
         img.style.height = "1.5em"
 

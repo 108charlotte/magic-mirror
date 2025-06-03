@@ -11,11 +11,12 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/magic-mirror/'
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      chunks: ['main', 'calendar', 'timeBlocking']
+      chunks: ['main', 'calendar', 'timeBlocking'],
     }),
     new CopyPlugin({
       patterns: [
