@@ -1,0 +1,39 @@
+<form>
+  <div class="block">
+    <label for="objective">Objective:</label>
+    <input type="text" id="objective" name="objective">
+  </div>
+
+  <div class="block">
+    <label for="start-time">Start Time:</label>
+    <input type="text" id="start-time" name="start-time">
+    <select id="start-time-am-pm-dropdown">
+      <option value="AM">AM</option>
+      <option value="PM">PM</option>
+    </select>
+  </div>
+
+  <div class="block">
+    <label for="dropdown">Choose an option:</label>
+    <select id="dropdown">
+      <option value="duration-dropdown">Duration</option>
+      <option value="endtime-dropdown">End Time</option>
+    </select>
+  </div>
+
+  <div class="block" id="end-time" style="display:none;">
+    <label for="end-time-input">End Time:</label>
+    <input type="text" id="end-time-input" name="end-time">
+    <select id="end-time-am-pm-dropdown">
+      <option value="AM">AM</option>
+      <option value="PM">PM</option>
+    </select>
+  </div>
+
+  <div class="block" id="duration">
+    <label for="duration-input">Duration (mins):</label>
+    <input type="text" id="duration-input" name="duration">
+  </div>
+
+  <button type="submit" id="submit">Submit</button>
+</form>
