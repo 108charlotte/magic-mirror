@@ -313,8 +313,8 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let row of rows) {
             scheduleTable.appendChild(row)
         }
+        filterRowsByDay()
         highlightOverlaps()
-        updateTableRounding()
     }
 
     function highlightOverlaps() {
@@ -435,7 +435,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isOldEvent) row.classList.add('old-event')
 
         changeVals(row)
-        updateTableRounding()
         return row
     }
 
