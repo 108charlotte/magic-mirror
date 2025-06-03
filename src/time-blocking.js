@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
                     const endTimeAMPM = document.getElementById("end-time-am-pm-dropdown")
 
-                    if (startTime.length == 1) {
+                    if (!startTime.includes(":")) {
                         startTime += ":00"
                     }
 
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     const objective = document.getElementById('objective').value
                     let startTime = document.getElementById('start-time').value.replace(/\s?(AM|PM)$/i, "")
-                    if (startTime.length == 1) {
+                    if (!startTime.includes(":")) {
                         startTime += ":00"
                     }
                     const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
