@@ -219,26 +219,19 @@ document.addEventListener("DOMContentLoaded", () => {
                         startTime += ":00"
                     }
                     const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
-                    const endTimeAMPM = document.getElementById("end-time-am-pm-dropdown")
+                    const fullStartTime = startTime + (startTimeAMPM ? " " + startTimeAMPM.value : "")
 
-                    const type = document.getElementById('dropdown').value
-                    const endTimeInput = document.getElementById('end-time-input').value
-                    const endTimeAMPMValue = endTimeAMPM ? endTimeAMPM.value : ""
-                    let endTimeValue = endTimeInput + (endTimeAMPMValue ? " " + endTimeAMPMValue : "")
-                    const durationValue = document.getElementById('duration-input').value
-
-                    console.log("durationValue: " + durationValue)
+                    const type = document.getElementById('dropdown').value;
+                    const durationValue = document.getElementById('duration-input').value;
+                    let endTimeValue = "";
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(
-                            startTime + (startTimeAMPM ? " " + startTimeAMPM.value : ""),
-                            durationValue
-                        )
-                    }
-
-                    if (objective.length == 0) {
-                        alert("Please enter an objective.")
-                        return
+                        endTimeValue = addMinsToTime(fullStartTime, durationValue)
+                    } else {
+                        const endTimeInput = document.getElementById('end-time-input').value
+                        const endTimeAMPM = document.getElementById("end-time-am-pm-dropdown")
+                        const endTimeAMPMValue = endTimeAMPM ? endTimeAMPM.value : ""
+                        endTimeValue = endTimeInput + (endTimeAMPMValue ? " " + endTimeAMPMValue : "")
                     }
 
                     let focusClasses = {
@@ -247,16 +240,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         isTomorrow: currDay === "tomorrow",
                     }
 
-                    startTime += postfix
-
-                    addNewRow(startTime + (startTimeAMPM ? " " + startTimeAMPM.value : ""), endTimeValue, objective, focusClasses)
-
                     if (objective.length == 0) {
                         alert("Please enter an objective.")
                         return
                     }
 
-                    startTime += postfix
+                    addNewRow(fullStartTime, endTimeValue, objective, focusClasses)
 
                     console.log('Focus scheduling form submitted')
                     document.getElementById('popup-modal').style.display = 'none'
