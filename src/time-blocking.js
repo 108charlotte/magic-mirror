@@ -123,10 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("durationValue: " + durationValue)
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(startTime, durationValue) + (startTimeAMPM ? " " + startTimeAMPM.value : "")
-                        if (parseInt(endTimeValue.match(/^(\d{1,2}):(\d{2})(?:\s?(AM|PM))?$/)[1], 10) > 12) {
-                            endTimeValue = (parseInt(endTimeValue.match(/^(\d{1,2}):(\d{2})(?:\s?(AM|PM))?$/)[1], 10) - 12) + endTimeValue.match(/:\d{2}\s(AM|PM)/)[0]
-                        }
+                        endTimeValue = addMinsToTime(startTime, durationValue)
                     }
 
                     let eventClasses = {
@@ -238,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("durationValue: " + durationValue)
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(startTime, durationValue) + (startTimeAMPM ? " " + startTimeAMPM.value : "")
+                        endTimeValue = addMinsToTime(startTime, durationValue)
                     }
 
                     if (objective.length == 0) {
@@ -349,25 +346,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function addMinsToTime(timeStr, minsToAdd) {
-        timeStr = timeStr.replace(/\s?(AM|PM)$/i, "")
-        let [hrs, mins] = timeStr.split(":").map(Number)
-        if (isNaN(hrs)) hrs = 0
-        if (isNaN(mins)) mins = 0
+        let formatted = timeStr.trim().toUpperCase().match(/^(\d{1,2}):(\d{2})\s?(AM|PM)?$/)
+        if (!formatted) return timeStr
 
-        let addH = 0, addM = 0
-        if (typeof minsToAdd === "string" && minsToAdd.includes(":")) {
-            [addH, addM] = minsToAdd.split(":").map(Number)
-        } else {
-            addM = Number(minsToAdd)
-        }
-        if (isNaN(addH)) addH = 0
-        if (isNaN(addM)) addM = 0
+        let h = parseInt(formatted[1], 10)
+        let m = parseInt(formatted[2], 10)
+        let ampm = formatted[3]
 
-        let totalMins = hrs * 60 + mins + addH * 60 + addM
-        let newHrs = Math.floor(totalMins / 60)
-        let newMins = totalMins % 60
+        if (ampm === "AM" && h === 12) h = 0
+        if (ampm === "PM" && h < 12) h += 12
+        let totalMins = h * 60 + m + Number(minsToAdd)
 
-        return `${String(newHrs)}:${String(newMins).padStart(2, "0")}`
+        totalMins = ((totalMins % 1440) + 1440) % 1440
+
+        let newH = Math.floor(totalMins / 60);
+        let newM = totalMins % 60;
+        let newAMPM = newH >= 12 ? "PM" : "AM";
+        if (newH === 0) newH = 12;
+        else if (newH > 12) newH -= 12;
+
+        return `${newH}:${String(newM).padStart(2, "0")} ${newAMPM}`
     }
 
     function newDay() {
