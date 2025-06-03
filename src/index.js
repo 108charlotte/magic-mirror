@@ -1,6 +1,6 @@
 import './style.scss'
 import dateFormat from 'dateformat'
-import { highlightCurrentEvent } from './time-blocking.js'
+import { highlightCurrentEvent, greyoutPastEvents } from './time-blocking.js'
 
 document.addEventListener('DOMContentLoaded', () => {
   customMessage()
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(function() {
     showTime()
     highlightCurrentEvent(time)
+    greyoutPastEvents(time)
   }, 1000)
 
   var addTaskButton = document.getElementById('new-task')

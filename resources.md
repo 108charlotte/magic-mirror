@@ -34,6 +34,12 @@ another article on the same thing: https://stackoverflow.com/questions/42180532/
 
 convert a string to a date: https://stackoverflow.com/questions/5619202/parsing-a-string-to-a-date-in-javascript
 
+useful article on matching strings to correct vals: https://stackoverflow.com/questions/33906033/regex-for-time-in-hhmm-am-pm-format
+
+how to add image to html table with javascript: https://stackoverflow.com/questions/16978296/insert-image-into-table-cell-in-javascript
+
+how to delete a row from a table using deleteRow() method in javascript: https://www.w3schools.com/Jsref/met_table_deleterow.asp
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date

@@ -49,28 +49,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (timePattern.test(time.trim())) break
                 alert("Please enter a valid time in H:MM format (e.g., 7:30 or 7).")
             }
+
             if (time.length == 1) {
                 time += ":00"
             }
-            var row = scheduleTable.insertRow()
-            row.insertCell(0).textContent = time
-            row.insertCell(1).textContent = addMinsToTime(time, 30)
-            row.insertCell(2).textContent = "Wake up, brush teeth, walk"
 
-            // sets up ability to change row values
-            changeVals(row)
-            row.classList.add('alarm-row')
-            row.classList.add(currDay)
+            const classes1 = {
+                isAlarmRow: true, 
+                isToday: currDay === "today",
+                isTomorrow: currDay === "tomorrow",
+            }
 
-            var row2 = scheduleTable.insertRow()
-            row2.insertCell(0).textContent = addMinsToTime(time, 45)
-            row2.insertCell(1).textContent = addMinsToTime(time, 75)
-            row2.insertCell(2).textContent = "Breakfast"
+            addNewRow(time + " AM", addMinsToTime(time, 30) + " AM", "Wake up, brush teeth, walk", classes1)
 
-            // sets up ability to change row values
-            changeVals(row2)
-            row2.classList.add('alarm-row')
-            row2.classList.add(currDay)
+            const classes2 = {
+                isAlarmRow: true, 
+                isToday: currDay === "today",
+                isTomorrow: currDay === "tomorrow",
+            }
+
+            addNewRow(addMinsToTime(time, 45) + " AM", addMinsToTime(time, 75) + " AM", "Breakfast", classes2)
 
             sortTableByStartTime()
             saveTableData()
@@ -107,30 +105,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     event.preventDefault()
                     
                     const eventName = document.getElementById('event-name').value
-                    var startTime = document.getElementById('start-time').value
+                    let startTime = document.getElementById('start-time').value.replace(/\s?(AM|PM)$/i, "")
+
+                    const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
+                    const endTimeAMPM = document.getElementById("end-time-am-pm-dropdown")
 
                     if (startTime.length == 1) {
                         startTime += ":00"
                     }
 
                     const type = document.getElementById('dropdown').value
-                    var endTimeValue = document.getElementById('end-time-input').value
+                    const endTimeInput = document.getElementById('end-time-input').value;
+                    const endTimeAMPMValue = endTimeAMPM ? endTimeAMPM.value : "";
+                    let endTimeValue = endTimeInput + (endTimeAMPMValue ? " " + endTimeAMPMValue : "");
                     const durationValue = document.getElementById('duration-input').value
 
                     console.log("durationValue: " + durationValue)
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(startTime, durationValue)
+                        endTimeValue = addMinsToTime(startTime, durationValue) + (startTimeAMPM ? " " + startTimeAMPM.value : "")
+                        if (parseInt(endTimeValue.match(/^(\d{1,2}):(\d{2})(?:\s?(AM|PM))?$/)[1], 10) > 12) {
+                            endTimeValue = (parseInt(endTimeValue.match(/^(\d{1,2}):(\d{2})(?:\s?(AM|PM))?$/)[1], 10) - 12) + endTimeValue.match(/:\d{2}\s(AM|PM)/)[0]
+                        }
                     }
 
-                    var row = scheduleTable.insertRow()
+                    let eventClasses = {
+                        isToday: currDay === "today",
+                        isTomorrow: currDay === "tomorrow",
+                    }
 
-                    row.insertCell(0).textContent = startTime
-                    row.insertCell(1).textContent = endTimeValue
-                    row.insertCell(2).textContent = eventName
-
-                    changeVals(row)
-                    row.classList.add(currDay)
+                    addNewRow(startTime + (startTimeAMPM ? " " + startTimeAMPM.value : ""), endTimeValue, eventName, eventClasses)
 
                     console.log('Event addition form submitted')
                     document.getElementById('popup-modal').style.display = 'none'
@@ -210,34 +214,54 @@ document.addEventListener("DOMContentLoaded", () => {
                     const objective = document.getElementById('objective').value
                     var startTime = document.getElementById('start-time').value
 
+                    var postfix = ""
+
+                    if (/\s?(AM|PM)$/i.test(startTime)) {
+                        postfix = startTime.match(/\s?(AM|PM)$/i)[0]
+                    }
+
+                    startTime = startTime.replace(/\s?(AM|PM)$/i, "")
+
                     if (startTime.length == 1) {
                         startTime += ":00"
                     }
 
+                    const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
+                    const endTimeAMPM = document.getElementById("end-time-am-pm-dropdown")
+
                     const type = document.getElementById('dropdown').value
-                    var endTimeValue = document.getElementById('end-time-input').value
+                    const endTimeInput = document.getElementById('end-time-input').value
+                    const endTimeAMPMValue = endTimeAMPM ? endTimeAMPM.value : ""
+                    let endTimeValue = endTimeInput + (endTimeAMPMValue ? " " + endTimeAMPMValue : "")
                     const durationValue = document.getElementById('duration-input').value
 
                     console.log("durationValue: " + durationValue)
 
                     if (type == "duration-dropdown") {
-                        endTimeValue = addMinsToTime(startTime, durationValue)
+                        endTimeValue = addMinsToTime(startTime, durationValue) + (startTimeAMPM ? " " + startTimeAMPM.value : "")
                     }
 
-                    var row = scheduleTable.insertRow()
-
-                    row.classList.add('focus-row')
-                    row.classList.add(currDay)
                     if (objective.length == 0) {
                         alert("Please enter an objective.")
                         return
                     }
 
-                    row.insertCell(0).textContent = startTime
-                    row.insertCell(1).textContent = endTimeValue
-                    row.insertCell(2).textContent = objective
+                    let focusClasses = {
+                        isFocusRow: true,
+                        isToday: currDay === "today",
+                        isTomorrow: currDay === "tomorrow",
+                    }
 
-                    changeVals(row)
+                    startTime += postfix
+
+                    addNewRow(startTime + (startTimeAMPM ? " " + startTimeAMPM.value : ""), endTimeValue, objective, focusClasses)
+
+                    if (objective.length == 0) {
+                        alert("Please enter an objective.")
+                        return
+                    }
+
+                    startTime += postfix
 
                     console.log('Focus scheduling form submitted')
                     document.getElementById('popup-modal').style.display = 'none'
@@ -261,7 +285,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const isAlarmRow = tr.classList.contains('alarm-row')
             const isToday = tr.classList.contains('today')
             const isTomorrow = tr.classList.contains('tomorrow')
-            rows.push({cells, isFocusRow, isAlarmRow, isToday, isTomorrow})
+            const isOldEvent = tr.classList.contains('old-event')
+            rows.push({cells, isFocusRow, isAlarmRow, isToday, isTomorrow, isOldEvent})
         }
         localStorage.setItem('scheduleTable', JSON.stringify(rows))
     }
@@ -278,17 +303,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (rowData.isAlarmRow) row.classList.add('alarm-row')
         if (rowData.isToday) row.classList.add('today')
         if (rowData.isTomorrow) row.classList.add('tomorrow')
+        if (rowData.isOldEvent) row.classList.add('old-event')
             changeVals(row)
         }
+
+        for (let row of scheduleTable.rows) {
+            addTrashcans(row)
+        }
+
         filterRowsByDay()
     }
 
     function sortTableByStartTime() {
         let rows = Array.from(scheduleTable.rows)
         rows.sort((a, b) => {
-            const timeA = a.cells[0].textContent.padStart(5, '0')
-            const timeB = b.cells[0].textContent.padStart(5, '0')
-            return timeA.localeCompare(timeB)
+            const timeA = timeStrToMins(a.cells[0].textContent)
+            const timeB = timeStrToMins(b.cells[0].textContent)
+            return timeA - timeB
         })
         scheduleTable.innerHTML = ''
         for (let row of rows) {
@@ -304,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
             row.classList.remove('overlap')
             const startTime = row.cells[0].textContent
             const endTime = row.cells[1].textContent
-            if (prevEndTime && compareTimes(startTime, prevEndTime) < 0) {
+            if (prevEndTime && timeStrToMins(startTime) < timeStrToMins(prevEndTime)) {
                 row.classList.add('overlap')
             }
             prevEndTime = endTime
@@ -318,7 +349,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function addMinsToTime(timeStr, minsToAdd) {
-        const [hrs, mins] = timeStr.split(":").map(Number)
+        timeStr = timeStr.replace(/\s?(AM|PM)$/i, "")
+        let [hrs, mins] = timeStr.split(":").map(Number)
         if (isNaN(hrs)) hrs = 0
         if (isNaN(mins)) mins = 0
 
@@ -366,7 +398,79 @@ document.addEventListener("DOMContentLoaded", () => {
             setInterval(newDay, 24 * 60 * 60 * 1000)
         }, millisTillMidnight)
     }
+
+    function addNewRow(startTime, endTime, description, {
+        isFocusRow = false,
+        isAlarmRow = false,
+        isToday = false,
+        isTomorrow = false,
+        isOldEvent = false} = {}) {
+
+        var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+        var row = scheduleTable.insertRow()
+
+        row.insertCell(0).textContent = startTime
+        row.insertCell(1).textContent = endTime
+        row.insertCell(2).textContent = description
+
+        addTrashcans(row)
+
+        if (isFocusRow) row.classList.add('focus-row')
+        if (isAlarmRow) row.classList.add('alarm-row')
+        if (isToday) row.classList.add('today')
+        if (isTomorrow) row.classList.add('tomorrow')
+        if (isOldEvent) row.classList.add('old-event')
+
+        changeVals(row)
+        return row
+    }
+
+    function addTrashcans(row) {
+        let imgCell = row.cells[3] ? row.cells[3] : row.insertCell(3)
+
+        let img = document.createElement("img")
+        img.src = "/assets/trash-can-icon.svg"
+        img.style.width = "1.5em"
+        img.style.height = "1.5em"
+
+        imgCell.appendChild(img)
+
+        img.addEventListener('click', function() {
+            const rowIndex = Array.from(row.parentNode.rows).indexOf(row)
+            scheduleTable.deleteRow(rowIndex)
+            saveTableData()
+        })
+    }
 })
+
+export function greyoutPastEvents(currTime) {
+    const mins = currTime.getHours() * 60 + currTime.getMinutes()
+
+    // shouldn't cause any issues since its inside of index.js's DOMContentLoaded
+    var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+
+    for (let row of scheduleTable.rows) {
+        let endTime = row.cells[1]?.textContent
+
+        if (!endTime) {
+            row.classList.remove("old-event")
+            continue
+        }
+        
+        // convert everything to minutes so i can compare directly
+        const endMins = timeStrToMins(endTime);
+        if (isNaN(endMins)) {
+            row.classList.remove("old-event");
+            continue;
+        }
+
+        if (mins >= endMins) {
+            row.classList.add("old-event");
+        } else {
+            row.classList.remove("old-event");
+        }
+    }
+}
 
 export function highlightCurrentEvent(currTime) {
     const mins = currTime.getHours() * 60 + currTime.getMinutes()
@@ -388,9 +492,17 @@ export function highlightCurrentEvent(currTime) {
             row.classList.remove("current-event")
         }
     }
+}
 
-    function timeStrToMins(str) {
-        const [h, m] = str.split(':').map(Number);
-        return h * 60 + m;
-    }
+function timeStrToMins(str) {
+    if (!str) return NaN
+    str = str.trim().toUpperCase()
+    const formatted = str.match(/^(\d{1,2}):(\d{2})(?:\s?(AM|PM))?$/i)
+    if (!formatted) return NaN
+    let h = parseInt(formatted[1], 10)
+    let m = parseInt(formatted[2], 10)
+    let ampm = formatted[3]
+    if (ampm === "AM" && h === 12) h = 0;
+    if (ampm === "PM" && h < 12) h += 12
+    return h * 60 + m;
 }

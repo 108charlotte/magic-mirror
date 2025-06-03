@@ -146,11 +146,15 @@ h2 {
     background-color: rgba($complimentary-color, 0.3); 
 }
 
-.overlap {
+.overlap, .overlap td {
     background-color: rgb(237, 91, 91);
 }
 
-.current-event {
+.current-event, .current-event td {
     background-color: rgba(#fff347, 1);
     color: #222
+}
+
+.old-event, .old-event td {
+    background-color: rgba(#747474, 0.8);
 }
