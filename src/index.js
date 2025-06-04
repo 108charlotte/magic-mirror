@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let time = new Date()
   let goalElement = document.getElementById('goal')
   let scheduleTable = document.getElementById('schedule-table')
+  let lastTask = null
 
   setInterval(function() {
     showTime()
