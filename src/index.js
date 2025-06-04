@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   showDate()
   showTime()
   
-  var time = new Date()
+  let time = new Date()
+  let goalElement = document.getElementById('goal')
+  let scheduleTable = document.getElementById('schedule-table')
 
   setInterval(function() {
     showTime()
@@ -15,9 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     greyoutPastEvents(time)
 
     // set current task to objective of current focus session, if any
-
-    let scheduleTable = document.getElementById('schedule-table')
-    let goalElement = document.getElementById('goal')
+    
     let found = false
     let currentTask = null
 
