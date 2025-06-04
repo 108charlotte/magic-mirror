@@ -19,29 +19,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let scheduleTable = document.getElementById('schedule-table')
     let goalElement = document.getElementById('goal')
     let found = false
+    let currentTask = null
 
     for (let row of scheduleTable.rows) {
       if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
-        let currentTask = row.cells[2].textContent;
-        if (goalElement.querySelector('.task-text')?.textContent !== currentTask) {
-          goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>';
-        }
+        currentTask = row.cells[2].textContent;
         found = true
         break
       }
-    } if (!found) {
-      let savedGoal = localStorage.getItem('currentGoal')
-      let currentTask = row.cells[2].textContent;
-      if (goalElement.querySelector('.task-text')?.textContent !== currentTask) {
-        goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>';
-      }
+    }
+    if (!found) {
+      currentTask = localStorage.getItem('currentGoal') || "No task set"
     }
 
+    // Only update DOM if task changed
+    if (goalElement.querySelector('.task-text')?.textContent !== currentTask) {
+      goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>';
+      // Reset crossed-off state for new task
+      localStorage.setItem('taskCrossedOff', 'false')
+    }
+
+    // Re-apply crossed-off style if needed
     let taskSpan = goalElement.querySelector('.task-text')
     let taskCrossedOff = localStorage.getItem('taskCrossedOff')
     if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
       taskSpan.style.textDecoration = "line-through"
       taskSpan.style.color = "gray"
+    } else if (taskSpan) {
+      taskSpan.style.textDecoration = "none"
+      taskSpan.style.color = "black"
     }
   }, 1000)
 
