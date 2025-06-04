@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let row of scheduleTable.rows) {
       if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
-        currentTask = row.cells[2].textContent;
+        currentTask = row.cells[2].textContent
         found = true
         break
       }
@@ -32,14 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
       currentTask = localStorage.getItem('currentGoal') || "No task set"
     }
 
-    // Only update DOM if task changed
+    // update dom if task changed
     if (goalElement.querySelector('.task-text')?.textContent !== currentTask) {
-      goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>';
-      // Reset crossed-off state for new task
-      localStorage.setItem('taskCrossedOff', 'false')
+      goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>'
+      if (lastTask !== currentTask) {
+        localStorage.setItem('taskCrossedOff', 'false')
+        lastTask = currentTask
+      }
     }
 
-    // Re-apply crossed-off style if needed
+    // cross off task if crossed off in localStorage
     let taskSpan = goalElement.querySelector('.task-text')
     let taskCrossedOff = localStorage.getItem('taskCrossedOff')
     if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
@@ -55,22 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
   addTaskButton.style.display = "block"
   addTaskButton.textContent = "New Active Task"
 
-  
-  let savedGoal = localStorage.getItem('currentGoal')
-  goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
-
-  let taskSpan = goalElement.querySelector('.task-text')
-  let taskCrossedOff = localStorage.getItem('taskCrossedOff')
-  if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
-    taskSpan.style.textDecoration = "line-through"
-    taskSpan.style.color = "gray"
-  }
-
   addTaskButton.addEventListener('click', function() {
     let newGoal = prompt("Enter your goal:")
     localStorage.setItem('currentGoal', newGoal ? newGoal : "")
     localStorage.setItem('taskCrossedOff', 'false')
-    goalElement.innerHTML = 'Current Task: <span class="task-text">' + (newGoal && newGoal.length > 0 ? newGoal : "No task set") + '</span>'
   })
 
   goalElement.addEventListener('click', function() {
