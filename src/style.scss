@@ -165,3 +165,8 @@ h2 {
 #upcoming-tasks-list {
   margin-top: 0.5rem;
 }
+
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}

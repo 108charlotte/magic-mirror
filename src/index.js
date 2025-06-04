@@ -22,6 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
     highlightCurrentEvent(time)
     greyoutPastEvents(time)
 
+    upcomingTaskList.addEventListener('click', function(e) {
+      const li = e.target.closest('li')
+      if (!li) return
+      if (e.target.closest('.remove-task')) {
+        li.remove()
+        saveTasks()
+      } else {
+        li.classList.toggle('completed')
+        saveTasks()
+      }
+    })
+
     // set current task to objective of current focus session, if any
     
     let found = false
@@ -94,6 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let upcomingTaskList = document.getElementById("upcoming-tasks-list")
   upcomingTaskButton.textContent = "Add Upcoming Task"
 
+  loadTasks()
+
   if (!window.upcomingTaskListenerAdded) {
         upcomingTaskButton.addEventListener('click', function() {
             let newTask = prompt("Enter your upcoming task:")
@@ -106,6 +120,18 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         window.upcomingTaskListenerAdded = true
     }
+
+    upcomingTaskList.addEventListener('click', function(e) {
+      const li = e.target.closest('li')
+      if (!li) return
+      if (e.target.closest('.remove-task')) {
+        li.remove()
+        saveTasks()
+      } else {
+        li.classList.toggle('completed')
+        saveTasks()
+      }
+    })
 })
 
 function saveTasks() {
@@ -124,7 +150,7 @@ function loadTasks() {
   let list = document.getElementById('upcoming-tasks-list')
   list.innerHTML = '';
     tasks.forEach(task => {
-      list.innerHTML += `<li class="${task.crossed ? 'crossed-off' : ''}">${task.text} <button class="remove-task" style="background:none;border:none;cursor:pointer;">
+      list.innerHTML += `<li class="${task.completed ? 'completed' : ''}">${task.text} <button class="remove-task" style="background:none;border:none;cursor:pointer;">
         <img src="${PATH}assets/trash-can-icon.svg" style="width:1.2em;height:1.2em;vertical-align:middle;" alt="Delete"/>
       </button></li>`
     })
