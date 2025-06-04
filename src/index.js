@@ -30,6 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
       let savedGoal = localStorage.getItem('currentGoal')
       goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
     }
+
+    let taskSpan = goalElement.querySelector('.task-text')
+    let taskCrossedOff = localStorage.getItem('taskCrossedOff')
+    if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
+      taskSpan.style.textDecoration = "line-through"
+      taskSpan.style.color = "gray"
+    }
   }, 1000)
 
   let addTaskButton = document.getElementById('new-task')
