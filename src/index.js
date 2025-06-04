@@ -26,8 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
   var taskSpan = goalElement.querySelector('.task-text')
   var taskCrossedOff = localStorage.getItem('taskCrossedOff')
   if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
-    taskSpan.style.textDecoration = "line-through";
-    taskSpan.style.color = "gray";
+    taskSpan.style.textDecoration = "line-through"
+    taskSpan.style.color = "gray"
+  }
+
+  let scheduleTable = document.getElementById('schedule-table')
+
+  for (let row of scheduleTable.rows) {
+    if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
+      goalElement.innerHTML = 'Current Task: <span class="task-text">' + row.cells[2].textContent + '</span>'
+    }
   }
 
   addTaskButton.addEventListener('click', function() {
