@@ -29,8 +29,19 @@ document.addEventListener('DOMContentLoaded', () => {
         break
       }
     }
-    if (!found) {
-      currentTask = localStorage.getItem('currentGoal') || "No task set"
+    
+    // allows new active task button to override timetable objective
+    let manualTask = localStorage.getItem('currentGoal');
+    if (manualTask && manualTask.length > 0) {
+      currentTask = manualTask
+    } else {
+      for (let row of scheduleTable.rows) {
+        if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
+          currentTask = row.cells[2].textContent
+          break
+        }
+      }
+      if (!currentTask) currentTask = "No task set"
     }
 
     // update dom if task changed
