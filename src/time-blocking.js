@@ -385,12 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // called at midnight, initiates rollover logic from last day to current day
     function newDay() {
-        for (let row of Array.from(scheduleTable.rows)) {
-            if (row.classList.contains("today")) {
-                scheduleTable.deleteRow(row.rowIndex-1)
-            }
-        }
-
+        // moves all tomorrow events to today (user can manually delete leftover today events if they want to)
         for (let row of Array.from(scheduleTable.rows)) {
             if (row.classList.contains('tomorrow')) {
                 row.classList.remove('tomorrow');
@@ -420,8 +415,8 @@ document.addEventListener("DOMContentLoaded", () => {
         isTomorrow = false,
         isOldEvent = false} = {}) {
 
-        var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
-        var row = scheduleTable.insertRow()
+        let scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+        let row = scheduleTable.insertRow()
 
         row.insertCell(0).textContent = startTime
         row.insertCell(1).textContent = endTime
@@ -431,8 +426,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isFocusRow) row.classList.add('focus-row')
         if (isAlarmRow) row.classList.add('alarm-row')
-        if (isToday) row.classList.add('today')
-        if (isTomorrow) row.classList.add('tomorrow')
+        row.classList.remove('today', 'tomorrow');
+        if (isToday) {
+            row.classList.add('today')
+        } else if (isTomorrow) {
+            row.classList.add('tomorrow')
+        }
         if (isOldEvent) row.classList.add('old-event')
 
         changeVals(row)

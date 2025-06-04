@@ -40,6 +40,8 @@ how to add image to html table with javascript: https://stackoverflow.com/questi
 
 how to delete a row from a table using deleteRow() method in javascript: https://www.w3schools.com/Jsref/met_table_deleterow.asp
 
+adding a favicon: https://www.w3schools.com/html/html_favicon.asp
+
 Guidelines: 
 🧠 Must-Have UI Components
 1. Current Time + Date
