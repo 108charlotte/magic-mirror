@@ -3,16 +3,16 @@ const isProd = process.env.NODE_ENV === 'production'
 const PATH = isProd ? '/magic-mirror/' : '/'
 
 document.addEventListener("DOMContentLoaded", () => {
-    var alarmButton = document.getElementById("alarm")
-    var eventButton = document.getElementById("event")
-    var focusButton = document.getElementById("schedule-focus")
-    var resetButton = document.getElementById("reset-table")
-    var viewTomorrow = document.getElementById("view-tomorrow")
-    var viewToday = document.getElementById("view-today")
+    let alarmButton = document.getElementById("alarm")
+    let eventButton = document.getElementById("event")
+    let focusButton = document.getElementById("schedule-focus")
+    let resetButton = document.getElementById("reset-table")
+    let viewTomorrow = document.getElementById("view-tomorrow")
+    let viewToday = document.getElementById("view-today")
 
-    var currDay = "today"
+    let currDay = "today"
 
-    var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+    let scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
 
     loadTableData()
     sortTableByStartTime()
@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
     function filterRowsByDay() {
         for (let row of scheduleTable.rows) {
             if (row.classList.contains(currDay)) {
-                row.style.display = '';
+                row.style.display = ''
             } else {
-                row.style.display = 'none';
+                row.style.display = 'none'
             }
         }
         updateTableRounding()
@@ -76,8 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
             sortTableByStartTime()
             saveTableData()
         })
+        window.alarmListenerAdded = true
     }
-    window.alarmListenerAdded = true
 
     eventButton.addEventListener('click', function() {
         fetch(PATH + 'popup-with-dropdown.html')
@@ -178,9 +178,9 @@ document.addEventListener("DOMContentLoaded", () => {
             input.addEventListener('blur', save)
         }
 
-        var startTimeCell = row.cells[0]
-        var endTimeCell = row.cells[1]
-        var eventNameCell = row.cells[2]
+        let startTimeCell = row.cells[0]
+        let endTimeCell = row.cells[1]
+        let eventNameCell = row.cells[2]
         startTimeCell.addEventListener('click', function() { changeVal(startTimeCell) })
         endTimeCell.addEventListener('click', function() { changeVal(endTimeCell) })
         eventNameCell.addEventListener('click', function() { changeVal(eventNameCell) })
@@ -222,9 +222,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     const startTimeAMPM = document.getElementById("start-time-am-pm-dropdown")
                     const fullStartTime = startTime + (startTimeAMPM ? " " + startTimeAMPM.value : "")
 
-                    const type = document.getElementById('dropdown').value;
-                    const durationValue = document.getElementById('duration-input').value;
-                    let endTimeValue = "";
+                    const type = document.getElementById('dropdown').value
+                    const durationValue = document.getElementById('duration-input').value
+                    let endTimeValue = ""
 
                     if (type == "duration-dropdown") {
                         endTimeValue = addMinsToTime(fullStartTime, durationValue)
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     function saveTableData() {
-        const rows = []; 
+        const rows = []
         for (let tr of scheduleTable.rows) {
             const cells = Array.from(tr.cells).map(td => td.textContent)
             const isFocusRow = tr.classList.contains('focus-row')
@@ -349,13 +349,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // updates which row has the tag for being the last row, important for css rounding to make the bottom of the table rounded like the top
     function updateTableRounding() {
         for (let row of scheduleTable.rows) {
-            row.classList.remove('last-visible-row');
+            row.classList.remove('last-visible-row')
         }
         
         // makes sure its only checking today or tomorrow/whatever ur on
-        const visibleRows = Array.from(scheduleTable.rows).filter(row => row.style.display !== 'none');
+        const visibleRows = Array.from(scheduleTable.rows).filter(row => row.style.display !== 'none')
         if (visibleRows.length > 0) {
-            visibleRows[visibleRows.length - 1].classList.add('last-visible-row');
+            visibleRows[visibleRows.length - 1].classList.add('last-visible-row')
         }
     }
 
@@ -373,11 +373,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         totalMins = ((totalMins % 1440) + 1440) % 1440
 
-        let newH = Math.floor(totalMins / 60);
-        let newM = totalMins % 60;
-        let newAMPM = newH >= 12 ? "PM" : "AM";
-        if (newH === 0) newH = 12;
-        else if (newH > 12) newH -= 12;
+        let newH = Math.floor(totalMins / 60)
+        let newM = totalMins % 60
+        let newAMPM = newH >= 12 ? "PM" : "AM"
+        if (newH === 0) newH = 12
+        else if (newH > 12) newH -= 12
 
         return `${newH}:${String(newM).padStart(2, "0")} ${newAMPM}`
     }
@@ -388,8 +388,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // moves all tomorrow events to today (user can manually delete leftover today events if they want to)
         for (let row of Array.from(scheduleTable.rows)) {
             if (row.classList.contains('tomorrow')) {
-                row.classList.remove('tomorrow');
-                row.classList.add('today');
+                row.classList.remove('tomorrow')
+                row.classList.add('today')
             }
         }
 
@@ -426,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isFocusRow) row.classList.add('focus-row')
         if (isAlarmRow) row.classList.add('alarm-row')
-        row.classList.remove('today', 'tomorrow');
+        row.classList.remove('today', 'tomorrow')
         if (isToday) {
             row.classList.add('today')
         } else if (isTomorrow) {
@@ -460,7 +460,7 @@ export function greyoutPastEvents(currTime) {
     const mins = currTime.getHours() * 60 + currTime.getMinutes()
 
     // shouldn't cause any issues since its inside of index.js's DOMContentLoaded
-    var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+    let scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
 
     for (let row of scheduleTable.rows) {
         let endTime = row.cells[1]?.textContent
@@ -489,11 +489,11 @@ export function highlightCurrentEvent(currTime) {
     const mins = currTime.getHours() * 60 + currTime.getMinutes()
 
     // shouldn't cause any issues since its inside of index.js's DOMContentLoaded
-    var scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
+    let scheduleTable = document.getElementById("schedule-table").getElementsByTagName("tbody")[0]
 
     for (let row of scheduleTable.rows) {
-        var startTime = row.cells[0].textContent
-        var endTime = row.cells[1].textContent
+        let startTime = row.cells[0].textContent
+        let endTime = row.cells[1].textContent
         
         // convert everything to minutes so i can compare directly
         const startMins = timeStrToMins(startTime)
@@ -515,7 +515,7 @@ function timeStrToMins(str) {
     let h = parseInt(formatted[1], 10)
     let m = parseInt(formatted[2], 10)
     let ampm = formatted[3]
-    if (ampm === "AM" && h === 12) h = 0;
+    if (ampm === "AM" && h === 12) h = 0
     if (ampm === "PM" && h < 12) h += 12
-    return h * 60 + m;
+    return h * 60 + m
 }

@@ -1,6 +1,8 @@
 import './style.scss'
 import dateFormat from 'dateformat'
 import { highlightCurrentEvent, greyoutPastEvents } from './time-blocking.js'
+const isProd = process.env.NODE_ENV === 'production'
+const PATH = isProd ? '/magic-mirror/' : '/'
 
 document.addEventListener('DOMContentLoaded', () => {
   customMessage()
@@ -11,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let scheduleTable = document.getElementById('schedule-table')
   let lastTask = null
   let lastFocusObjective = localStorage.getItem('lastFocusObjective') || null
+
+  loadTasks()
 
   setInterval(function() {
     let time = new Date()
@@ -85,7 +89,46 @@ document.addEventListener('DOMContentLoaded', () => {
   goalElement.addEventListener('click', function() {
     crossOffTask()
   })
+
+  let upcomingTaskButton = document.getElementById("new-upcoming-task")
+  let upcomingTaskList = document.getElementById("upcoming-tasks-list")
+  upcomingTaskButton.textContent = "Add Upcoming Task"
+
+  if (!window.upcomingTaskListenerAdded) {
+        upcomingTaskButton.addEventListener('click', function() {
+            let newTask = prompt("Enter your upcoming task:")
+            if (newTask) {
+                upcomingTaskList.innerHTML += `<li>${newTask} <button class="remove-task" style="background:none;border:none;cursor:pointer;">
+                    <img src="${PATH}assets/trash-can-icon.svg" style="width:1.2em;height:1.2em;vertical-align:middle;" alt="Delete"/>
+                    </button></li>`
+              saveTasks()
+            }
+        })
+        window.upcomingTaskListenerAdded = true
+    }
 })
+
+function saveTasks() {
+  let tasks = []
+  document.querySelectorAll('#upcoming-tasks-list li').forEach(li => {
+    tasks.push({
+      text: li.childNodes[0].textContent.trim(), 
+      completed: li.classList.contains('completed')
+    })
+  })
+  localStorage.setItem('allTasks', JSON.stringify(tasks))
+}
+
+function loadTasks() {
+  let tasks = JSON.parse(localStorage.getItem('allTasks')) || []
+  let list = document.getElementById('upcoming-tasks-list')
+  list.innerHTML = '';
+    tasks.forEach(task => {
+      list.innerHTML += `<li class="${task.crossed ? 'crossed-off' : ''}">${task.text} <button class="remove-task" style="background:none;border:none;cursor:pointer;">
+        <img src="${PATH}assets/trash-can-icon.svg" style="width:1.2em;height:1.2em;vertical-align:middle;" alt="Delete"/>
+      </button></li>`
+    })
+}
 
 function customMessage() {
   let myDate = new Date()
