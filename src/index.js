@@ -112,9 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
         upcomingTaskButton.addEventListener('click', function() {
             let newTask = prompt("Enter your upcoming task:")
             if (newTask) {
-                upcomingTaskList.innerHTML += `<li>${newTask} <button class="remove-task" style="background:none;border:none;cursor:pointer;">
-                    <img src="${PATH}assets/trash-can-icon.svg" style="width:1.2em;height:1.2em;vertical-align:middle;" alt="Delete"/>
-                    </button></li>`
+              const li = document.createElement('li')
+                li.innerHTML = `${newTask} <button class="remove-task" style="background:none;border:none;cursor:pointer;">
+                  <img src="${PATH}assets/trash-can-icon.svg" style="width:1.2em;height:1.2em;vertical-align:middle;" alt="Delete"/>
+                </button>`
+                upcomingTaskList.appendChild(li)
               saveTasks()
             }
         })
