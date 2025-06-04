@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   entry: {
@@ -11,7 +12,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/magic-mirror/'
+    publicPath: isProd ? '/magic-mirror/' : '/',
   },
   plugins: [
     new HtmlWebpackPlugin({

@@ -2,9 +2,8 @@
   "name": "magic-mirror",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx webpack --mode production",
-    "start": "npm run build && npx webpack serve --mode development --open --hot", 
+    "start": "webpack serve --mode development --open --hot",
+    "build": "webpack --mode production",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build"
   },

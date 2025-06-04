@@ -1,5 +1,6 @@
 import './popup-style.scss'
-const PATH = '/magic-mirror/'
+const isProd = process.env.NODE_ENV === 'production'
+const PATH = isProd ? '/magic-mirror/' : '/'
 
 document.addEventListener("DOMContentLoaded", () => {
     var alarmButton = document.getElementById("alarm")
