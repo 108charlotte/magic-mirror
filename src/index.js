@@ -7,12 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   showDate()
   showTime()
   
-  let time = new Date()
   let goalElement = document.getElementById('goal')
   let scheduleTable = document.getElementById('schedule-table')
   let lastTask = null
+  let lastFocusObjective = localStorage.getItem('lastFocusObjective') || null
 
   setInterval(function() {
+    let time = new Date()
     showTime()
     highlightCurrentEvent(time)
     greyoutPastEvents(time)
@@ -21,13 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let found = false
     let currentTask = null
+    let currentFocusObjective = null
 
     for (let row of scheduleTable.rows) {
       if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
-        currentTask = row.cells[2].textContent
-        found = true
+        currentFocusObjective = row.cells[2].textContent
         break
       }
+    }
+
+    if (currentFocusObjective && currentFocusObjective !== lastFocusObjective) {
+      localStorage.removeItem('currentGoal');
+      lastFocusObjective = currentFocusObjective;
+      localStorage.setItem('lastFocusObjective', currentFocusObjective);
     }
     
     // allows new active task button to override timetable objective
