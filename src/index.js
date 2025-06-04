@@ -13,33 +13,42 @@ document.addEventListener('DOMContentLoaded', () => {
     showTime()
     highlightCurrentEvent(time)
     greyoutPastEvents(time)
+
+    // set current task to objective of current focus session, if any
+
+    let scheduleTable = document.getElementById('schedule-table')
+    let goalElement = document.getElementById('goal')
+    let found = false
+
+    for (let row of scheduleTable.rows) {
+      if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
+        goalElement.innerHTML = 'Current Task: <span class="task-text">' + row.cells[2].textContent + '</span>'
+        found = true
+        break
+      }
+    } if (!found) {
+      let savedGoal = localStorage.getItem('currentGoal')
+      goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
+    }
   }, 1000)
 
-  var addTaskButton = document.getElementById('new-task')
+  let addTaskButton = document.getElementById('new-task')
   addTaskButton.style.display = "block"
   addTaskButton.textContent = "New Active Task"
 
-  var goalElement = document.getElementById('goal')
-  var savedGoal = localStorage.getItem('currentGoal')
+  
+  let savedGoal = localStorage.getItem('currentGoal')
   goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
 
-  var taskSpan = goalElement.querySelector('.task-text')
-  var taskCrossedOff = localStorage.getItem('taskCrossedOff')
+  let taskSpan = goalElement.querySelector('.task-text')
+  let taskCrossedOff = localStorage.getItem('taskCrossedOff')
   if (taskCrossedOff === 'true' && taskSpan && taskSpan.textContent !== "No task set") {
     taskSpan.style.textDecoration = "line-through"
     taskSpan.style.color = "gray"
   }
 
-  let scheduleTable = document.getElementById('schedule-table')
-
-  for (let row of scheduleTable.rows) {
-    if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
-      goalElement.innerHTML = 'Current Task: <span class="task-text">' + row.cells[2].textContent + '</span>'
-    }
-  }
-
   addTaskButton.addEventListener('click', function() {
-    var newGoal = prompt("Enter your goal:")
+    let newGoal = prompt("Enter your goal:")
     localStorage.setItem('currentGoal', newGoal ? newGoal : "")
     localStorage.setItem('taskCrossedOff', 'false')
     goalElement.innerHTML = 'Current Task: <span class="task-text">' + (newGoal && newGoal.length > 0 ? newGoal : "No task set") + '</span>'
@@ -51,10 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function customMessage() {
-  var myDate = new Date()
-  var hrs = myDate.getHours()
-  var mins = myDate.getMinutes()
-  var greet
+  let myDate = new Date()
+  let hrs = myDate.getHours()
+  let mins = myDate.getMinutes()
+  let greet
 
   //   morning |  5:30-11:59
   // afternoon | 12:00-17:59
@@ -72,8 +81,8 @@ function customMessage() {
 }
 
 function showTime() {
-    var date = new Date()
-    var formattedTime = dateFormat(date, "h:MM:ss TT")
+    let date = new Date()
+    let formattedTime = dateFormat(date, "h:MM:ss TT")
     document.getElementById('hours').textContent = dateFormat(date, "h")
     document.getElementById('minutes').textContent = dateFormat(date, "MM")
     document.getElementById('seconds').textContent = dateFormat(date, "ss")
@@ -81,13 +90,13 @@ function showTime() {
 }
 
 function showDate() {
-    var now = new Date();
-    var formattedDate = dateFormat(now, "dddd, mmmm dS, yyyy");
+    let now = new Date();
+    let formattedDate = dateFormat(now, "dddd, mmmm dS, yyyy");
     document.getElementById('date').textContent = "Current Date: " + formattedDate;
 }
 
 function crossOffTask() {
-  var taskSpan = document.querySelector('#goal .task-text')
+  let taskSpan = document.querySelector('#goal .task-text')
   if (!taskSpan) return
   if (taskSpan.style.textDecoration === "line-through") {
     taskSpan.style.textDecoration = "none"
