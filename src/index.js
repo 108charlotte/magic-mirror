@@ -22,13 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let row of scheduleTable.rows) {
       if (row.classList.contains('current-event') && row.classList.contains('focus-row')) {
-        goalElement.innerHTML = 'Current Task: <span class="task-text">' + row.cells[2].textContent + '</span>'
+        let currentTask = row.cells[2].textContent;
+        if (goalElement.querySelector('.task-text')?.textContent !== currentTask) {
+          goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>';
+        }
         found = true
         break
       }
     } if (!found) {
       let savedGoal = localStorage.getItem('currentGoal')
-      goalElement.innerHTML = 'Current Task: <span class="task-text">' + (savedGoal && savedGoal.length > 0 ? savedGoal : "No task set") + '</span>'
+      let currentTask = row.cells[2].textContent;
+      if (goalElement.querySelector('.task-text')?.textContent !== currentTask) {
+        goalElement.innerHTML = 'Current Task: <span class="task-text">' + currentTask + '</span>';
+      }
     }
 
     let taskSpan = goalElement.querySelector('.task-text')
