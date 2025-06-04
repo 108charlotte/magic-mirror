@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "webpack serve --mode development --open --hot",
-    "build": "webpack --mode production",
-    "deploy": "gh-pages -d dist",
+    "build": "NODE_ENV=production webpack --mode production",
+    "deploy": "NODE_ENV=production gh-pages -d dist",
     "predeploy": "npm run build"
   },
   "private": true,
