@@ -34,6 +34,18 @@ function gisLoaded() {
     });
     gisInited = true;
     maybeEnableButtons();
+
+    // Try silent token request
+    tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+            // User interaction required
+            return;
+        }
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').innerText = 'Refresh';
+        await listUpcomingEvents();
+    };
+    tokenClient.requestAccessToken({prompt: ''});
 }
 
 function maybeEnableButtons() {
