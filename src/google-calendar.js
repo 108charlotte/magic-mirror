@@ -129,8 +129,8 @@ function handleAuthClick() {
             let end = event.end.dateTime || event.end.date
             tableHTML += `<tr>
                 <td style="padding:4px;">${event.summary || '(No title)'}</td>
-                <td style="padding:4px;">${start.replace('T', ' ').replace(/:00(\.\d+)?Z?$/, '')}</td>
-                <td style="padding:4px;">${end.replace('T', ' ').replace(/:00(\.\d+)?Z?$/, '')}</td>
+                <td style="padding:4px;">${new Date(start).toLocaleTimeString([], { minute: '2-digit'})}</td>
+                <td style="padding:4px;">${new Date(end).toLocaleTimeString([], { minute: '2-digit'})}</td>
             </tr>`
           })
 
