@@ -79,7 +79,7 @@ function handleAuthClick() {
         if (token !== null) {
           google.accounts.oauth2.revoke(token.access_token);
           gapi.client.setToken('');
-          document.getElementById('content').innerText = '';
+          document.getElementById('event-table').innerText = '';
           document.getElementById('authorize_button').innerText = 'Authorize';
           document.getElementById('signout_button').style.visibility = 'hidden';
         }
@@ -104,20 +104,39 @@ function handleAuthClick() {
             };
             response = await gapi.client.calendar.events.list(request);
         } catch (err) {
-            document.getElementById('content').innerText = err.message;
+            document.getElementById('event-table').innerText = err.message;
             return;
     }
 
     const events = response.result.items;
         if (!events || events.length == 0) {
-            document.getElementById('content').innerText = 'No events today.';
+            document.getElementById('event-table').innerText = 'No events today.';
             return;
         }
-        // Flatten to string to display
-        const output = events.reduce(
-            (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
-            'Events:\n');
-        document.getElementById('content').innerText = output;
+
+        let tableHTML = `<table>
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+          </thead>
+          <tbody>`; 
+        
+          events.forEach(event => {
+            let start = event.start.dateTime || event.start.date
+            let end = event.end.dateTime || event.end.date
+            tableHTML += `<tr>
+                <td style="padding:4px;">${event.summary || '(No title)'}</td>
+                <td style="padding:4px;">${start.replace('T', ' ').replace(/:00(\.\d+)?Z?$/, '')}</td>
+                <td style="padding:4px;">${end.replace('T', ' ').replace(/:00(\.\d+)?Z?$/, '')}</td>
+            </tr>`
+          })
+
+          tableHTML += `</tbody></table>`
+
+          document.getElementById('event-table').innerHTML = tableHTML;
 }
 
 window.handleAuthClick = handleAuthClick;
