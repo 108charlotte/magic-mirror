@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     main: './src/index.js',
     calendar: './src/google-calendar.js', 
-    timeBlocking: './src/time-blocking.js'
+    timeBlocking: './src/time-blocking.js', 
+    hackClub: './src/hack-club-events.js'
   }, 
   output: {
     filename: '[name].js',
@@ -17,7 +18,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      chunks: ['main', 'calendar', 'timeBlocking'],
+      chunks: ['main', 'calendar', 'timeBlocking', 'hackClub'],
     }),
     new CopyPlugin({
       patterns: [

@@ -39,7 +39,7 @@ h2 {
 }
 
 .clock-container {
-    background: #ffe066; // deeper, more visible yellow
+    background: #ffe066;
     color: #222;
     border: 2.5px solid #bfa800;
     box-shadow: 0 2px 8px rgba(44, 62, 80, 0.15);
@@ -195,4 +195,15 @@ h2 {
 #event-table tr:hover {
   background-color: #f0f0f0;
   cursor: pointer;
+}
+
+#hack-club {
+  border-collapse: separate;
+  border-spacing: 2rem 0; 
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: rgba($secondary-color, 0.8); 
+  border-radius: 10px; 
+  margin-bottom: 1rem; 
 }
