@@ -1,4 +1,4 @@
-const CLIENT_ID = '88942946394-v2e4pbcm1a4lkn8upsher35nsjcknmp1.apps.googleusercontent.com';
+const CLIENT_ID = '88942946394-7a0efu7ror7lhhoqjft9bod098r33eu0.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyA9_NUnPURqgh8GtAoox3bD9Xim6qUlO9k';
 
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
@@ -126,6 +126,4 @@ function loadGoogleApiScripts() {
   document.head.appendChild(gisScript);
 }
 
-document.addEventListener('DOMContentLoaded', loadGoogleApiScripts);
-
-// my code
+document.addEventListener('DOMContentLoaded', loadGoogleApiScripts); 
