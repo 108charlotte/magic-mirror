@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             htmlElement.innerHTML = `<h2>Upcoming Hack Club Events</h2>`
-            console.log(data)
+            const hackClubData = JSON.parse(data.contents);
+            console.log(hackClubData)
         })
         .catch(error => {
             htmlElement.innerHTML = `<p>Error fetching events: ${error.message}</p>`
