@@ -197,14 +197,45 @@ h2 {
   cursor: pointer;
 }
 
-#hack-club {
-  border-collapse: separate;
-  border-spacing: 2rem 0; 
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background: rgba($secondary-color, 0.8); 
-  border-radius: 10px; 
-  margin-bottom: 1rem; 
-  margin: 5px; 
+#hack-club-events {
+  background-color: rgba($secondary-color, 0.6);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+  color: #145a32;
+}
+
+.event {
+  margin-bottom: 1rem;
+  font-weight: 400;
+  color: #222;
+  line-height: 1.5;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.event > div {
+  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+}
+
+.event-desc {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #333;
+  white-space: pre-wrap; 
+  word-break: break-word;
+  max-width: 100%; 
+  background: rgba(255, 255, 255, 0.6); 
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
