@@ -212,12 +212,16 @@ h2 {
 }
 
 .event {
-  margin-bottom: 1rem;
   font-weight: 400;
   color: #222;
   line-height: 1.5;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.event + .event {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  padding-top: 1rem;
 }
 
 .event > div {
