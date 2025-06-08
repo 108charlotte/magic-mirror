@@ -1,5 +1,34 @@
-## Magic Mirror/Smart Display Project
+# 🖥️ Raspberry Pi–Powered Desktop Productivity Dashboard
 
-Welcome to my magic mirror project! This repo is the code for the display for a raspberry pi 4 + monitor setup I created in my room! In addition to just the pi and the monitor, I also have a senseHAT constantly checking if the cpu temp is at a safe level and reporting back by changing the colors of the LEDs (that's in the senseHAT-temp-monitor repo if you want to check it out, its super simple tho, this was the bulk of the project)! On the raspberry pi, I am running a basic raspian desktop, but I typically have it open to chromium with this display up! I called it a magic mirror because its inspired by similar raspberry pi-powered monitor projects designed to give you access to important information at a glance. Check out my resources.md to see some of the resources I used in creating this project, and I hope you like it! Also let me know if you have any ideas for improvements or cool new features I could implement! 
+![ss](https://github.com/user-attachments/assets/4ad89d68-9a67-43f6-b950-0cf1cf5ba336)
 
-* this is also my first hardware + software project, so for anyone who's scared about checking out hardware I would definitely recommend doing something like this which combines both to get more comfortable with it--after this, I definitely want to explore more, and maybe you will too! ![ss](https://github.com/user-attachments/assets/1d002402-2dd8-46e0-a5e7-b0340f7e9b6e)
+Welcome to my productivity dashboard project! This repo contains the code for the display I run on a Raspberry Pi 4 + monitor setup mounted above my desk.
+
+It’s inspired by the MagicMirror project and designed to show just the essentials — clock, calendar, and to-dos — in a clean, distraction-free fullscreen layout.
+
+<img width="1462" alt="Screenshot 2025-06-07 at 3 08 58 PM" src="https://github.com/user-attachments/assets/cff49610-2ed2-4b7d-8ce5-3189389b31e1" />
+
+# 🧠 What It Does
+- Displays a fullscreen dashboard in Chromium on Raspbian
+
+- Shows calendar events, clock, and tasks at a glance
+
+- Keeps me focused and on top of upcoming events
+
+# 🧰 Extras
+I also have a Sense HAT temperature monitor running on the same Pi, which changes the LED color based on CPU temperature. It’s super simple, but makes sure I don't overheat by accident when working overtime :)
+
+# 📚 Resources
+Check out resources.md for some of the tutorials, tools, and references I used while building this.
+
+# 💬 Why I Built This
+This was my first hardware + software project, and I wanted to share it for anyone who’s been curious about exploring hardware but felt intimidated (like I was!).
+
+If you're into web dev and want to dip into hardware, I’d definitely recommend something like this — it helped me gain confidence, and now I’m excited to build more.
+
+# 🚀 Try It Yourself
+⚠️ Live demo: https://108charlotte.github.io/magic-mirror/
+(Note: requires Google sign-in to show your calendar and may show an “unverified app” warning — it’s safe, but if you still don't want to bypass it you can just close out of the popup that opens and the dashboard will work just fine without the calendar!)
+
+# 🙌 Feedback Welcome
+I’d love ideas for features, layout improvements, or general feedback — and I’m totally open to contributors!
