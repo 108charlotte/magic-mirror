@@ -16,7 +16,7 @@ It’s inspired by the MagicMirror project and designed to show just the essenti
 - Keeps me focused and on top of upcoming events
 
 # 🧰 Extras
-I also have a Sense HAT temperature monitor running on the same Pi, which changes the LED color based on CPU temperature. It’s super simple, but makes sure I don't overheat by accident when working overtime :)
+I also have a Sense HAT temperature monitor running on the same Pi, which changes the LED color based on CPU temperature, to make sure I don't overheat by accident :)
 
 # 📚 Resources
 Check out resources.md for some of the tutorials, tools, and references I used while building this.
@@ -24,11 +24,11 @@ Check out resources.md for some of the tutorials, tools, and references I used w
 # 💬 Why I Built This
 This was my first hardware + software project, and I wanted to share it for anyone who’s been curious about exploring hardware but felt intimidated (like I was!).
 
-If you're into web dev and want to dip into hardware, I’d definitely recommend something like this — it helped me gain confidence, and now I’m excited to build more.
+If you're into web dev and want to dip into hardware, I’d definitely recommend something like this — it helped me gain a lot of confidence, and definitely inspired me to look deeper into hardware.
 
 # 🚀 Try It Yourself
 ⚠️ Live demo: https://108charlotte.github.io/magic-mirror/
 (Note: requires Google sign-in to show your calendar and may show an “unverified app” warning — it’s safe, but if you still don't want to bypass it you can just close out of the popup that opens and the dashboard will work just fine without the calendar!)
 
 # 🙌 Feedback Welcome
-I’d love ideas for features, layout improvements, or general feedback — and I’m totally open to contributors!
+I’d love ideas for features, layout improvements, or general feedback — I’m also open to contributors!
