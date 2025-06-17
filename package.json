@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "webpack serve --mode development --open --hot",
-    "build": "NODE_ENV=production webpack --mode production",
-    "deploy": "NODE_ENV=production gh-pages -d dist",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "deploy": "cross-env NODE_ENV=production gh-pages -d dist",
     "predeploy": "npm run build"
   },
   "private": true,
@@ -14,6 +14,7 @@
   "description": "",
   "devDependencies": {
     "copy-webpack-plugin": "^13.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^7.1.2",
     "gh-pages": "^6.3.0",
     "html-bundler-webpack-plugin": "^4.20.2",
