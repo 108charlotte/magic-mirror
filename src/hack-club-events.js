@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
         throw err
       }
 
+      const now = Date.now();
+      events = events.filter(event => new Date(event.start).getTime() > now);
+
       htmlElement.innerHTML = `
         <h2>Upcoming Hack Club Events</h2>
         <div class="events-list">
