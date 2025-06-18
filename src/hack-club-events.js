@@ -16,10 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const now = Date.now();
       events = events.filter(event => {
-        const endTime = event.end ? new Date(event.end).getTime() : null;
-        const startTime = new Date(event.start).getTime();
-        // Only show if event ends in the future, or (if no end) starts in the future
-        return (endTime && endTime > now) || (!endTime && startTime > now);
+        const startTime = Date.parse(event.start);
+        return !isNaN(startTime) && startTime > now;
       });
 
       htmlElement.innerHTML = `
