@@ -9,9 +9,9 @@ let gapiInited = false;
 let gisInited = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('authorize_button').style.visibility = 'hidden';
+    document.getElementById('authorize_button').style.visibility = 'visible';
     document.getElementById('signout_button').style.visibility = 'hidden';
-})
+});
 
 function gapiLoaded() {
     gapi.load('client', initializeGapiClient);
@@ -54,89 +54,97 @@ function maybeEnableButtons() {
     }
 }
 
+let scriptsLoaded = false;
+
 function handleAuthClick() {
-        tokenClient.callback = async (resp) => {
-          if (resp.error !== undefined) {
-            throw (resp);
-          }
-          document.getElementById('signout_button').style.visibility = 'visible';
-          document.getElementById('authorize_button').innerText = 'Refresh';
-          await listUpcomingEvents();
-        };
-
-        if (gapi.client.getToken() === null) {
-          // Prompt the user to select a Google Account and ask for consent to share their data
-          // when establishing a new session.
-          tokenClient.requestAccessToken({prompt: 'consent'});
-        } else {
-          // Skip display of account chooser and consent dialog for an existing session.
-          tokenClient.requestAccessToken({prompt: ''});
-        }
-      }
-
-      function handleSignoutClick() {
-        const token = gapi.client.getToken();
-        if (token !== null) {
-          google.accounts.oauth2.revoke(token.access_token);
-          gapi.client.setToken('');
-          document.getElementById('event-table').innerText = '';
-          document.getElementById('authorize_button').innerText = 'Authorize';
-          document.getElementById('signout_button').style.visibility = 'hidden';
-        }
-      }
-
-      // this is the part i am editing from the tutorial
-    async function listUpcomingEvents() {
-        let response;
-        const now = new Date();
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-
-        try {
-            const request = {
-                'calendarId': 'primary',
-                'showDeleted': false,
-                'singleEvents': true,
-                'maxResults': 10,
-                'orderBy': 'startTime',
-                'timeMin': startOfDay.toISOString(), 
-                'timeMax': endOfDay.toISOString(),
-            };
-            response = await gapi.client.calendar.events.list(request);
-        } catch (err) {
-            document.getElementById('event-table').innerText = err.message;
-            return;
+    if (!scriptsLoaded) {
+        loadGoogleApiScripts();
+        scriptsLoaded = true;
+        // The actual sign-in will happen after scripts are loaded and initialized
+        // The gapiLoaded and gisLoaded functions will be called by the script onload events
+        // and will enable the authorize button when ready
+        return;
     }
 
-    const events = response.result.items;
-        if (!events || events.length == 0) {
-            document.getElementById('event-table').innerText = 'No events today.';
-            return;
+    tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+            throw (resp);
         }
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').innerText = 'Refresh';
+        await listUpcomingEvents();
+    };
 
-        let tableHTML = `<table>
-        <thead>
-          <tr>
-            <th>Event</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-          </tr>
-          </thead>
-          <tbody>`; 
-        
-          events.forEach(event => {
-            let start = event.start.dateTime || event.start.date
-            let end = event.end.dateTime || event.end.date
-            tableHTML += `<tr>
-                <td style="padding:4px;">${event.summary || '(No title)'}</td>
-                <td style="padding:4px;">${new Date(start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit'})}</td>
-                <td style="padding:4px;">${new Date(end).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit'})}</td>
-            </tr>`
-          })
+    if (gapi.client.getToken() === null) {
+        tokenClient.requestAccessToken({prompt: 'consent'});
+    } else {
+        tokenClient.requestAccessToken({prompt: ''});
+    }
+}
 
-          tableHTML += `</tbody></table>`
+function handleSignoutClick() {
+    const token = gapi.client.getToken();
+    if (token !== null) {
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+        document.getElementById('event-table').innerText = '';
+        document.getElementById('authorize_button').innerText = 'Authorize';
+        document.getElementById('signout_button').style.visibility = 'hidden';
+    }
+}
 
-          document.getElementById('event-table').innerHTML = tableHTML;
+// this is the part i am editing from the tutorial
+async function listUpcomingEvents() {
+    let response;
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+    try {
+        const request = {
+            'calendarId': 'primary',
+            'showDeleted': false,
+            'singleEvents': true,
+            'maxResults': 10,
+            'orderBy': 'startTime',
+            'timeMin': startOfDay.toISOString(), 
+            'timeMax': endOfDay.toISOString(),
+        };
+        response = await gapi.client.calendar.events.list(request);
+    } catch (err) {
+        document.getElementById('event-table').innerText = err.message;
+        return;
+}
+
+const events = response.result.items;
+    if (!events || events.length == 0) {
+        document.getElementById('event-table').innerText = 'No events today.';
+        return;
+    }
+
+    let tableHTML = `<table>
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+      </tr>
+      </thead>
+      <tbody>`; 
+    
+      events.forEach(event => {
+        let start = event.start.dateTime || event.start.date
+        let end = event.end.dateTime || event.end.date
+        tableHTML += `<tr>
+            <td style="padding:4px;">${event.summary || '(No title)'}</td>
+            <td style="padding:4px;">${new Date(start).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit'})}</td>
+            <td style="padding:4px;">${new Date(end).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit'})}</td>
+        </tr>`
+      })
+
+      tableHTML += `</tbody></table>`
+
+      document.getElementById('event-table').innerHTML = tableHTML;
 }
 
 window.handleAuthClick = handleAuthClick;
@@ -156,5 +164,3 @@ function loadGoogleApiScripts() {
   gisScript.onload = () => window.gisLoaded();
   document.head.appendChild(gisScript);
 }
-
-document.addEventListener('DOMContentLoaded', loadGoogleApiScripts); 
